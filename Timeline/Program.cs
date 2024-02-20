@@ -1,9 +1,31 @@
+using System.Configuration;
+using Microsoft.EntityFrameworkCore;
+using Timeline.Helpers;
 using Timeline.Models;
-
+// var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<ApplicationDBContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("TimelineContext")));
+
+builder.Services.AddCors(options =>
+{
+    // options.AddPolicy(name: MyAllowSpecificOrigins,
+    //     policy  =>
+    //     {
+    //         policy.WithOrigins("http://localhost:5173")
+    //             .AllowAnyHeader()
+    //             .AllowAnyMethod();
+    //     });
+    options.AddDefaultPolicy(builder => {
+        builder.WithOrigins("http://localhost:5173");
+        builder.WithMethods("GET", "POST");
+        builder.AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 
@@ -19,6 +41,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseCors();
 
 app.UseAuthorization();
 

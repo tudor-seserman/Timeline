@@ -4,12 +4,12 @@ public class TEvent
 {
     public int Id { get; set; }
     public DateTime DateTime { get; set; }
-    public string Desrciption { get; set; }
+    public string Description { get; set; }
 
-    public TEvent(int id, DateTime dateTime, string desrciption)
+    public TEvent(int id, DateTime dateTime, string description)
     {
         Id = id;
         DateTime = dateTime;
-        Desrciption = desrciption;
+        Description = description;
     }
 }
