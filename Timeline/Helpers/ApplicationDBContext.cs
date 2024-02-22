@@ -1,22 +1,24 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Timeline.Models;
 
 namespace Timeline.Helpers;
 
-public class ApplicationDBContext:DbContext
+public class ApplicationDBContext : IdentityDbContext<AppUser>
 {
-    protected readonly IConfiguration Configuration;
+    // protected readonly IConfiguration Configuration;
 
-    public ApplicationDBContext(IConfiguration configuration)
+    public ApplicationDBContext(DbContextOptions dbContextOptions)
+        :base(dbContextOptions)
     {
-        Configuration = configuration;
+        
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
-    {
-        // connect to postgres with connection string from app settings
-        options.UseNpgsql(Configuration.GetConnectionString("TimelineContext"));
-    }
+    // protected override void OnConfiguring(DbContextOptionsBuilder options)
+    // {
+    //     // connect to postgres with connection string from app settings
+    //     options.UseNpgsql(Configuration.GetConnectionString("TimelineContext"));
+    // }
 
     public DbSet<TEvent> TEvents { get; set; }
 }

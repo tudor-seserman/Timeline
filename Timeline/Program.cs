@@ -1,8 +1,12 @@
 using System.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Timeline.Helpers;
 using Timeline.Models;
-// var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -13,18 +17,43 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 
 builder.Services.AddCors(options =>
 {
-    // options.AddPolicy(name: MyAllowSpecificOrigins,
-    //     policy  =>
-    //     {
-    //         policy.WithOrigins("http://localhost:5173")
-    //             .AllowAnyHeader()
-    //             .AllowAnyMethod();
-    //     });
-    options.AddDefaultPolicy(builder => {
-        builder.WithOrigins("http://localhost:5173");
-        builder.WithMethods("GET", "POST");
-        builder.AllowAnyHeader();
-    });
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy  =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequiredLength = 5;
+    options.Password.RequiredUniqueChars = 5;
+
+}).AddEntityFrameworkStores<ApplicationDBContext>();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme =
+        options.DefaultAuthenticateScheme =
+            options.DefaultForbidScheme =
+                options.DefaultChallengeScheme =
+                    options.DefaultSignInScheme =
+                        options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        ValidateIssuerSigningKey =true, 
+        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigninKey"]))
+    };
 });
 
 var app = builder.Build();
@@ -42,9 +71,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseCors();
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllerRoute(
     name: "default",
