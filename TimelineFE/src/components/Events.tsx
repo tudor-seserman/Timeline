@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Calendar } from "primereact/calendar";
 import { Nullable } from "primereact/ts-helpers";
@@ -20,7 +20,7 @@ const Events = () => {
     const createEvent = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         try {
-            const response = await api.post("/Event", event);
+            await api.post("/Event", event);
         } catch (e) {
             console.log(e);
         }
