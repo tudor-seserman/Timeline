@@ -5,7 +5,7 @@ using Timeline.Models;
 
 namespace Timeline.Helpers;
 
-public class ApplicationDBContext : IdentityDbContext<AppUser>
+public class ApplicationDBContext : IdentityDbContext<AppUser, IdentityRole, string>
 {
 
     public ApplicationDBContext(DbContextOptions dbContextOptions)
@@ -17,22 +17,19 @@ public class ApplicationDBContext : IdentityDbContext<AppUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-
-        List<IdentityRole> roles = new List<IdentityRole>
+    
+        var roleNames = new string[] { "Admin", "User" };
+        foreach (var roleName in roleNames)
         {
-            new IdentityRole
+            var role = new IdentityRole
             {
-                Name = "Admin",
-                NormalizedName = "ADMIN"
-            },
-            new IdentityRole
-            {
-                Name = "User",
-                NormalizedName = "USER"
-            },
-        };
+                Id = Guid.NewGuid().ToString(),
+                Name = roleName,
+                NormalizedName = roleName.ToUpperInvariant()
+            };
 
-        builder.Entity<IdentityRole>().HasData(roles);
+            builder.Entity<IdentityRole>().HasData(role);
+        }
     }
 
     public DbSet<TEvent> TEvents { get; set; }
