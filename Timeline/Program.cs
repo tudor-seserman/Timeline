@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Timeline.Helpers;
+using Timeline.Data;
 using Timeline.Interfaces;
 using Timeline.Models;
 using Timeline.Service;

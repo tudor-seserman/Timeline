@@ -5,6 +5,7 @@ using Timeline.Helpers.DTOs;
 using Timeline.Helpers.DTOs.Account;
 using Timeline.Interfaces;
 using Timeline.Models;
+using Timeline.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Timeline.Controllers

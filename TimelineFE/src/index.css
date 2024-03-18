@@ -66,3 +66,25 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.registration-form .card {
+  min-width: 450px;
+}
+.registration-form .card form {
+  margin-top: 2rem;
+}
+.registration-form .card .field {
+  margin-bottom: 1.5rem;
+  color: black;
+}
+@media screen and (max-width: 960px) {
+  .registration-form .card {
+    width: 80%;
+  }
+}
+@media screen and (max-width: 640px) {
+  .registration-form .card {
+    width: 100%;
+    min-width: 0;
+  }
+}

@@ -1,36 +1,44 @@
+using System.Configuration;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Timeline.Models;
 
-namespace Timeline.Helpers;
+namespace Timeline.Data;
 
-public class ApplicationDBContext : IdentityDbContext<AppUser, IdentityRole, string>
+public class ApplicationDBContext : IdentityDbContext<AppUser>
 {
-
-    public ApplicationDBContext(DbContextOptions dbContextOptions)
+    private readonly IConfiguration _configuration;
+    public ApplicationDBContext(DbContextOptions dbContextOptions,IConfiguration configuration)
         :base(dbContextOptions)
     {
-        
+        _configuration = configuration;
     }
+    
+    public DbSet<TEvent> TEvents { get; set; }
+    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseNpgsql(_configuration.GetConnectionString("TimelineContext"));
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
     
-        var roleNames = new string[] { "Admin", "User" };
-        foreach (var roleName in roleNames)
+        List<IdentityRole> roles = new() 
         {
-            var role = new IdentityRole
+            new IdentityRole
             {
-                Id = Guid.NewGuid().ToString(),
-                Name = roleName,
-                NormalizedName = roleName.ToUpperInvariant()
-            };
-
-            builder.Entity<IdentityRole>().HasData(role);
-        }
+                Name = "Admin",
+                NormalizedName = "ADMIN"
+            },
+            new IdentityRole
+            {
+                Name = "User",
+                NormalizedName = "USER"
+            },
+        };
+        builder.Entity<IdentityRole>().HasData(roles);
+        
     }
-
-    public DbSet<TEvent> TEvents { get; set; }
 }
