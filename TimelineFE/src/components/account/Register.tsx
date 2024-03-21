@@ -10,7 +10,7 @@ import * as z from "zod";
 import api from "../../API/axiosConfig"
 
 const RegistrationSchema = z.object({
-    name: z.string(),
+    username: z.string(),
     email: z.string().email(),
     password: z.string()
         .min(8)
@@ -50,7 +50,7 @@ export const Register = () => {
             reValidateMode: "onBlur",
             resolver: zodResolver(RegistrationSchema),
             defaultValues: {
-                name: "",
+                username: "",
                 email: "",
                 password: "",
                 verifyPassword: "",
@@ -59,7 +59,7 @@ export const Register = () => {
 
     const onSubmit: SubmitHandler<RegistrationSchemaValues> = async (data) => {
         const registrationDTO: IRegistrationDTO = {
-            username: data.name,
+            username: data.username,
             email: data.email,
             password: data.password,
         }
@@ -99,17 +99,17 @@ export const Register = () => {
                         <div className="field">
                             <span className="p-float-label">
                                 <Controller
-                                    name="name"
+                                    name="username"
                                     control={control}
                                     render={({ field }) => (
                                         <InputText
-                                            id={field.name}
+                                            id={field.username}
                                             {...field}
                                             autoFocus />
                                     )} />
-                                <label htmlFor="name" className={classNames({ 'p-error': errors.name })}>Name*</label>
+                                <label htmlFor="username" className={classNames({ 'p-error': errors.username })}>Username*</label>
                             </span>
-                            {errors.name && <small className="p-error">{errors.name.message}</small>}
+                            {errors.username && <small className="p-error">{errors.username.message}</small>}
                         </div>
 
 
