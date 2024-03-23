@@ -8,6 +8,7 @@ import { classNames } from 'primereact/utils';
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import api from "../../API/axiosConfig"
+import { IRegistrationDTO } from '../../interfaces/IRegistrationDTO';
 
 const RegistrationSchema = z.object({
     username: z.string(),
@@ -32,16 +33,12 @@ const RegistrationSchema = z.object({
 
 export type RegistrationSchemaValues = z.infer<typeof RegistrationSchema>
 
-export type IRegistrationDTO = {
-    username: string
-    email: string
-    password: string
-}
 
 
 export const Register = () => {
 
-    const { control,
+    const {
+        control,
         formState: { errors, isSubmitting },
         handleSubmit,
         reset }
@@ -103,7 +100,7 @@ export const Register = () => {
                                     control={control}
                                     render={({ field }) => (
                                         <InputText
-                                            id={field.username}
+                                            id={field.name}
                                             {...field}
                                             autoFocus />
                                     )} />

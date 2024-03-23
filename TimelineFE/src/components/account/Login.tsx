@@ -6,6 +6,7 @@ import { classNames } from 'primereact/utils';
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import api from "../../API/axiosConfig"
+import { ILoginDTO } from '../../interfaces/ILoginDTO';
 
 const LoginSchema = z.object({
     username: z.string(),
@@ -20,10 +21,7 @@ const LoginSchema = z.object({
 
 export type LoginSchemaValues = z.infer<typeof LoginSchema>
 
-export type IRegistrationDTO = {
-    username: string
-    password: string
-}
+
 
 export const Login = () => {
 
@@ -42,7 +40,7 @@ export const Login = () => {
         });
 
     const onSubmit: SubmitHandler<LoginSchemaValues> = async (data) => {
-        const loginDTO: IRegistrationDTO = {
+        const loginDTO: ILoginDTO = {
             username: data.username,
             password: data.password,
         }
@@ -73,7 +71,7 @@ export const Login = () => {
                                     control={control}
                                     render={({ field }) => (
                                         <InputText
-                                            id={field.username}
+                                            id={field.name}
                                             {...field}
                                             autoFocus />
                                     )} />

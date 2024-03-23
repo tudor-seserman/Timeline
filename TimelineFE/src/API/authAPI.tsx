@@ -1,0 +1,40 @@
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { RootState } from '../redux/store'
+import { IRegistrationDTO } from '../interfaces/IRegistrationDTO'
+import { ILoginDTO } from '../interfaces/ILoginDTO'
+import { IUserResponse } from '../interfaces/IUserResponse'
+
+export const api = createApi({
+    baseQuery: fetchBaseQuery({
+        baseUrl: 'src/API/axiosConfig.tsx',
+        prepareHeaders: (headers, { getState }) => {
+            // By default, if we have a token in the store, let's use that for authenticated requests
+            const token = (getState() as RootState).auth.token
+            if (token) {
+                headers.set('authorization', `Bearer ${token}`)
+            }
+            return headers
+        },
+    }),
+    endpoints: (builder) => ({
+        login: builder.mutation<IUserResponse, ILoginDTO>({
+            query: (credentials) => ({
+                url: 'Account/login',
+                method: 'POST',
+                body: credentials,
+            }),
+        }),
+        register: builder.mutation<IUserResponse, IRegistrationDTO>({
+            query: (credentials) => ({
+                url: 'Account/register',
+                method: 'POST',
+                body: credentials,
+            }),
+        }),
+        protected: builder.mutation<{ message: string }, void>({
+            query: () => 'protected',
+        }),
+    }),
+})
+
+export const { useRegisterMutation, useLoginMutation, useProtectedMutation } = api
