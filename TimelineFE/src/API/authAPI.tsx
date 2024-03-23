@@ -6,7 +6,7 @@ import { IUserResponse } from '../interfaces/IUserResponse'
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({
-        baseUrl: 'src/API/axiosConfig.tsx',
+        baseUrl: 'http://localhost:5128/api/',
         prepareHeaders: (headers, { getState }) => {
             // By default, if we have a token in the store, let's use that for authenticated requests
             const token = (getState() as RootState).auth.token

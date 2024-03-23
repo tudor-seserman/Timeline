@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
@@ -7,8 +7,13 @@ import { Divider } from 'primereact/divider';
 import { classNames } from 'primereact/utils';
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import api from "../../API/axiosConfig"
+// import api from "../../API/axiosConfig"
 import { IRegistrationDTO } from '../../interfaces/IRegistrationDTO';
+import { useLoginMutation, useRegisterMutation } from '../../API/authAPI';
+import { setCredentials } from '../../redux/authSlice';
+import { useDispatch } from 'react-redux';
+import { IRegistrationError } from '../../interfaces/IRegistrationError';
+import { Toast } from 'primereact/toast';
 
 const RegistrationSchema = z.object({
     username: z.string(),
@@ -36,6 +41,10 @@ export type RegistrationSchemaValues = z.infer<typeof RegistrationSchema>
 
 
 export const Register = () => {
+    const [register] = useRegisterMutation();
+    const dispatch = useDispatch();
+    const toast = useRef<Toast>(null);
+
 
     const {
         control,
@@ -61,15 +70,24 @@ export const Register = () => {
             password: data.password,
         }
 
-        const response = await api.post("Account/register", registrationDTO, {
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        });
-        console.log(data);
-        reset();
-        console.log(response);
+        try {
+            const user = await register(registrationDTO).unwrap()
+            dispatch(setCredentials(user))
+            reset();
+        } catch (errors: unknown) {
+            const showError = (message: string) => {
+                toast.current?.show({ severity: 'error', summary: 'Error', detail: (message), life: 3000 });
+            }
+            if (errors.data instanceof Array) {
+                console.log("a")
+                errors.data.forEach((e: IRegistrationError) => {
+                    showError(e.description);
+                });
+            } else {
+                console.log("b")
+                showError("Something went wrong. Please try again or contact support.");
+            }
+        }
     };
 
     const passwordHeader = <h6>Pick a password</h6>;
@@ -87,82 +105,84 @@ export const Register = () => {
     );
 
     return (
-        <div className="registration-form">
-            <div className="flex justify-content-center">
-                <div className="card mt-2 mb-1.5">
-                    <h5 className="text-center">Register</h5>
-                    <form onSubmit={handleSubmit(onSubmit)} className="p-fluid">
+        <> <Toast ref={toast} />
+            <div className="registration-form">
+                <div className="flex justify-content-center">
+                    <div className="card mt-2 mb-1.5">
+                        <h5 className="text-center">Register</h5>
+                        <form onSubmit={handleSubmit(onSubmit)} className="p-fluid">
 
-                        <div className="field">
-                            <span className="p-float-label">
-                                <Controller
-                                    name="username"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <InputText
-                                            id={field.name}
-                                            {...field}
-                                            autoFocus />
-                                    )} />
-                                <label htmlFor="username" className={classNames({ 'p-error': errors.username })}>Username*</label>
-                            </span>
-                            {errors.username && <small className="p-error">{errors.username.message}</small>}
-                        </div>
+                            <div className="field">
+                                <span className="p-float-label">
+                                    <Controller
+                                        name="username"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <InputText
+                                                id={field.name}
+                                                {...field}
+                                                autoFocus />
+                                        )} />
+                                    <label htmlFor="username" className={classNames({ 'p-error': errors.username })}>Username*</label>
+                                </span>
+                                {errors.username && <small className="p-error">{errors.username.message}</small>}
+                            </div>
 
 
-                        <div className="field">
-                            <span className="p-float-label p-input-icon-right">
-                                <i className="pi pi-envelope" />
-                                <Controller name="email"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <InputText
-                                            id={field.name}
-                                            {...field} />
-                                    )} />
-                                <label htmlFor="email" className={classNames({ 'p-error': !!errors.email })}>Email*</label>
-                            </span>
-                            {errors.email && <small className="p-error">{errors.email.message}</small>}
-                        </div>
+                            <div className="field">
+                                <span className="p-float-label p-input-icon-right">
+                                    <i className="pi pi-envelope" />
+                                    <Controller name="email"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <InputText
+                                                id={field.name}
+                                                {...field} />
+                                        )} />
+                                    <label htmlFor="email" className={classNames({ 'p-error': !!errors.email })}>Email*</label>
+                                </span>
+                                {errors.email && <small className="p-error">{errors.email.message}</small>}
+                            </div>
 
-                        <div className="field">
-                            <span className="p-float-label">
-                                <Controller
-                                    name="password"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Password
-                                            id={field.name}
-                                            {...field}
-                                            toggleMask
-                                            header={passwordHeader}
-                                            footer={passwordFooter} />
-                                    )} />
-                                <label htmlFor="password" className={classNames({ 'p-error': errors.password })}>Password*</label>
-                            </span>
-                            {errors.password && <small className="p-error">{errors.password.message}</small>}
-                        </div>
+                            <div className="field">
+                                <span className="p-float-label">
+                                    <Controller
+                                        name="password"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Password
+                                                id={field.name}
+                                                {...field}
+                                                toggleMask
+                                                header={passwordHeader}
+                                                footer={passwordFooter} />
+                                        )} />
+                                    <label htmlFor="password" className={classNames({ 'p-error': errors.password })}>Password*</label>
+                                </span>
+                                {errors.password && <small className="p-error">{errors.password.message}</small>}
+                            </div>
 
-                        <div className="field">
-                            <span className="p-float-label">
-                                <Controller name="verifyPassword"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Password
-                                            id={field.name}
-                                            {...field}
-                                            toggleMask
-                                        />
-                                    )} />
-                                <label htmlFor="verifyPassword" className={classNames({ 'p-error': errors.verifyPassword })}>Verify Password*</label>
-                            </span>
-                            {errors.verifyPassword && <small className="p-error">{errors.verifyPassword.message}</small>}
-                        </div>
-                        <Button disabled={isSubmitting} className="mt-2" type="submit" label={isSubmitting ? "Sending..." : "Register"} />
+                            <div className="field">
+                                <span className="p-float-label">
+                                    <Controller name="verifyPassword"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Password
+                                                id={field.name}
+                                                {...field}
+                                                toggleMask
+                                            />
+                                        )} />
+                                    <label htmlFor="verifyPassword" className={classNames({ 'p-error': errors.verifyPassword })}>Verify Password*</label>
+                                </span>
+                                {errors.verifyPassword && <small className="p-error">{errors.verifyPassword.message}</small>}
+                            </div>
+                            <Button disabled={isSubmitting} className="mt-2" type="submit" label={isSubmitting ? "Sending..." : "Register"} />
 
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
