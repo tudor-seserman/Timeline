@@ -7,6 +7,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import api from "../../API/axiosConfig"
 import { ILoginDTO } from '../../interfaces/ILoginDTO';
+import { useLoginMutation } from '../../API/authAPI';
+import { useDispatch } from 'react-redux';
+import { useError } from '../../hooks/useError';
+import { IBackendResponse } from '../../interfaces/IBackendResponse';
+import { setCredentials } from '../../redux/authSlice';
 
 const LoginSchema = z.object({
     username: z.string(),
@@ -24,6 +29,9 @@ export type LoginSchemaValues = z.infer<typeof LoginSchema>
 
 
 export const Login = () => {
+    const [login] = useLoginMutation();
+    const dispatch = useDispatch();
+    const { setApiError } = useError();
 
     const { control,
         formState: { errors, isSubmitting },
@@ -45,15 +53,25 @@ export const Login = () => {
             password: data.password,
         }
 
-        const response = await api.post("Account/login", loginDTO, {
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        });
-        console.log(data);
-        reset();
-        console.log(response);
+        try {
+            const user = await login(loginDTO).unwrap()
+            dispatch(setCredentials(user))
+            reset();
+        } catch (error: unknown) {
+
+            setApiError(error as IBackendResponse);
+
+        }
+
+        // const response = await api.post("Account/login", loginDTO, {
+        //     headers: {
+        //         Accept: "application/json",
+        //         "Content-Type": "application/json",
+        //     },
+        // });
+        // console.log(data);
+        // reset();
+        // console.log(response);
     };
 
 

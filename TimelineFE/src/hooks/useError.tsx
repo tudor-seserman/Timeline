@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { IBackendResponse } from "../interfaces/IBackendResponse";
 import { useDispatch } from "react-redux";
 import { createErrorMsg, resetState } from "../redux/errorAlertSlice";
@@ -8,18 +8,23 @@ export const useError = () => {
     const dispatch = useDispatch();
 
     if (apiError?.status == 500) {
-        const errors = apiError?.data?.map(e => {
-            return {
-                severity: "error",
-                message: e.description
-            };
-        });
-        setTimeout(() => {
+        if (Array.isArray(apiError.data)) {
+            const errors = apiError?.data?.map(e => {
+                return {
+                    severity: "error",
+                    message: e.description
+                };
+            });
             dispatch(createErrorMsg(errors as IAlert[]))
-        }, 0);
-        console.log(apiError.data?.length)
-    }
+        }
+    } else if (apiError?.originalStatus == 401) {
+        dispatch(createErrorMsg([{
+            severity: "error",
+            message: apiError.data
+        }] as IAlert[]))
 
+    }
+    console.log(apiError)
     // useEffect(() => {
     //     if (apiError?.status == 500) {
     //         const errors = apiError?.data?.map(e => {

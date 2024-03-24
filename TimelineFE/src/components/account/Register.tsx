@@ -76,9 +76,9 @@ export const Register = () => {
             dispatch(setCredentials(user))
             reset();
         } catch (error: unknown) {
-            setTimeout(() => {
-                setApiError(error as IBackendResponse);
-            }, 0);
+
+            setApiError(error as IBackendResponse);
+
         }
     };
 
