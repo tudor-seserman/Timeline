@@ -1,25 +1,26 @@
 import { useRef } from 'react';
 import { Toast } from 'primereact/toast';
+import { useAppSelector } from '../../hooks/useRedux';
 import { useError } from '../../hooks/useError';
-import { IRegistrationError } from '../../interfaces/IRegistrationError';
+import { IToastAlert } from '../../interfaces/IToastAlert';
 
 
 
 export const ApiErrors = () => {
-    const { apiError } = useError();
+    const { clearError } = useError();
     const toast = useRef<Toast>(null);
+    const errorAlerts = useAppSelector(state => state.errorAlert);
+    let errorsToShow: IToastAlert[];
 
-    const showError = (message: string) => {
-        toast.current?.show({ severity: 'error', summary: 'Error', detail: (message), life: 3000 });
+    const showError = (alerts: IToastAlert[]) => {
+        toast.current?.show(alerts);
     }
 
-
-    if (apiError?.data instanceof Array) {
-        apiError?.data.forEach((e: IRegistrationError) => {
-            showError(e.description);
-        });
-    } else {
-        showError("Something went wrong. Please try again or contact support.");
+    if (errorAlerts != null) {
+        toast.current?.clear();
+        errorsToShow = errorAlerts.map(alert => { return { severity: alert.severity, summary: 'Error', detail: alert.message, life: 3000 } })
+        showError(errorsToShow)
+        clearError()
     }
 
     return (

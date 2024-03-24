@@ -76,20 +76,9 @@ export const Register = () => {
             dispatch(setCredentials(user))
             reset();
         } catch (error: unknown) {
-            console.log(error)
-            setApiError(error as IBackendResponse);
-
-
-            // const showError = (message: string) => {
-            //     toast.current?.show({ severity: 'error', summary: 'Error', detail: (message), life: 3000 });
-            // }
-            // if (errors.data instanceof Array) {
-            //     errors.data.forEach((e: IRegistrationError) => {
-            //         showError(e.description);
-            //     });
-            // } else {
-            //     showError("Something went wrong. Please try again or contact support.");
-            // }
+            setTimeout(() => {
+                setApiError(error as IBackendResponse);
+            }, 0);
         }
     };
 

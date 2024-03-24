@@ -1,4 +1,7 @@
 export interface IBackendResponse {
-    data: []
-    status: number
+    data?: [{
+        code: string
+        description: string
+    }]
+    status?: number
 }
