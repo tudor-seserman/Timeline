@@ -12,7 +12,6 @@ export const NavBar = () => {
     const dispatch = useDispatch();
     let loggedInUser = useAppSelector(state => state.auth.token);
 
-    console.log(loggedInUser)
     const items: MenuItem[] = [
         {
             id: 'nav1',

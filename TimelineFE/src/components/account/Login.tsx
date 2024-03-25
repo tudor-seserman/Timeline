@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { useError } from '../../hooks/useError';
 import { IBackendResponse } from '../../interfaces/IBackendResponse';
 import { setCredentials } from '../../redux/authSlice';
+import { Card } from 'primereact/card';
 
 const LoginSchema = z.object({
     username: z.string(),
@@ -20,6 +21,7 @@ const LoginSchema = z.object({
         .regex(/[a-z]/, { message: "Must contain at least one lowercase letter." })
         .regex(/[A-Z]/, { message: "Must contain at least one uppercase letter." })
         .regex(/[0-9]/, { message: "Must contain at least one number." })
+        .regex(/\W|_/, { message: "Must contain at least one non-letter and non-number." })
     ,
 })
 
@@ -63,51 +65,53 @@ export const Login = () => {
 
 
     return (
-        <div className="registration-form">
-            <div className="flex justify-content-center">
-                <div className="card mt-2 mb-1.5">
-                    <h5 className="text-center">Login</h5>
-                    <form onSubmit={handleSubmit(onSubmit)} className="p-fluid">
+        <Card className="bg-cyan-600" title="Login">
+            <div className="registration-form">
+                <div className="flex justify-content-center">
+                    <div className="card mt-2 mb-1.5">
+                        <form onSubmit={handleSubmit(onSubmit)} className="p-fluid">
 
-                        <div className="field">
-                            <span className="p-float-label">
-                                <Controller
-                                    name="username"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <InputText
-                                            id={field.name}
-                                            {...field}
-                                            autoFocus />
-                                    )} />
-                                <label htmlFor="username" className={classNames({ 'p-error': errors.username })}>Name*</label>
-                            </span>
-                            {errors.username && <small className="p-error">{errors.username.message}</small>}
-                        </div>
+                            <div className="field">
+                                <span className="p-float-label">
+                                    <Controller
+                                        name="username"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <InputText
+                                                id={field.name}
+                                                {...field}
+                                                autoFocus />
+                                        )} />
+                                    <label htmlFor="username" className={classNames({ 'p-error': errors.username })}>Name*</label>
+                                </span>
+                                {errors.username && <small className="p-error">{errors.username.message}</small>}
+                            </div>
 
 
-                        <div className="field">
-                            <span className="p-float-label">
-                                <Controller
-                                    name="password"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Password
-                                            id={field.name}
-                                            {...field}
-                                            toggleMask
-                                        />
-                                    )} />
-                                <label htmlFor="password" className={classNames({ 'p-error': errors.password })}>Password*</label>
-                            </span>
-                            {errors.password && <small className="p-error">{errors.password.message}</small>}
-                        </div>
+                            <div className="field">
+                                <span className="p-float-label">
+                                    <Controller
+                                        name="password"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Password
+                                                id={field.name}
+                                                {...field}
+                                                toggleMask
+                                                feedback={false}
+                                            />
+                                        )} />
+                                    <label htmlFor="password" className={classNames({ 'p-error': errors.password })}>Password*</label>
+                                </span>
+                                {errors.password && <small className="p-error">{errors.password.message}</small>}
+                            </div>
 
-                        <Button disabled={isSubmitting} className="mt-2" type="submit" label={isSubmitting ? "Sending..." : "Login"} />
+                            <Button disabled={isSubmitting} className="mt-2" type="submit" label={isSubmitting ? "Sending..." : "Login"} />
 
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </Card>
     )
 }

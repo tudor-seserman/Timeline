@@ -17,12 +17,9 @@ export const ApiErrors = () => {
     }
 
     if (errorAlerts != null) {
-        setTimeout(() => {
-            toast.current?.clear();
-            errorsToShow = errorAlerts.map(alert => { return { severity: alert.severity, summary: 'Error', detail: alert.message, life: 3000 } })
-            showError(errorsToShow)
-            clearError()
-        }, 0)
+        errorsToShow = errorAlerts.map(alert => { return { severity: alert.severity, summary: 'Error', detail: alert.message, life: 3000 } })
+        showError(errorsToShow)
+        clearError()
     }
 
     return (
