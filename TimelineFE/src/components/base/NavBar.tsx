@@ -20,6 +20,12 @@ export const NavBar = () => {
 
         },
         {
+            id: 'nav2',
+            label: 'Dashboard',
+            visible: loggedInUser != null,
+            command: () => { navigate('/dash') },
+        },
+        {
             id: 'nav4',
             label: 'Login',
             visible: loggedInUser == null,
@@ -30,7 +36,8 @@ export const NavBar = () => {
             label: 'Register',
             visible: loggedInUser == null,
             command: () => navigate('/register'),
-        }, {
+        },
+        {
             id: 'nav6',
             label: 'Logout',
             visible: loggedInUser != null,

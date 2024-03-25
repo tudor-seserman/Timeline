@@ -1,6 +1,6 @@
 import { Register } from "../components/account/Register"
 
-export const RegistrationPage = () => {
+export default function RegistrationPage() {
     return (
         <div className="card justify-center flex">
             <Register />

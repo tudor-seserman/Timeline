@@ -70,7 +70,6 @@ export const Register = () => {
             email: data.email,
             password: data.password,
         }
-
         try {
             const user = await register(registrationDTO).unwrap()
             dispatch(setCredentials(user))

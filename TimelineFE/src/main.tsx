@@ -7,6 +7,7 @@ import { PrimeReactProvider } from 'primereact/api';
 import { NavBar } from './components/base/NavBar.tsx';
 import 'primereact/resources/themes/tailwind-light/theme.css'; //theme
 import 'primereact/resources/primereact.min.css'; //core css
+import "/node_modules/primeflex/primeflex.css";
 import "./global.css"
 import { Provider } from 'react-redux'
 import { store } from './redux/store.tsx'

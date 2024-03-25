@@ -1,6 +1,6 @@
 import { Login } from "../components/account/Login"
 
-export const LoginPage = () => {
+export default function LoginPage() {
     return (
         <div className="card justify-center flex">
             <Login />
