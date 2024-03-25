@@ -5,7 +5,6 @@ import { Password } from 'primereact/password';
 import { classNames } from 'primereact/utils';
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import api from "../../API/axiosConfig"
 import { ILoginDTO } from '../../interfaces/ILoginDTO';
 import { useLoginMutation } from '../../API/authAPI';
 import { useDispatch } from 'react-redux';
@@ -52,27 +51,15 @@ export const Login = () => {
             username: data.username,
             password: data.password,
         }
-
         try {
             const user = await login(loginDTO).unwrap()
             dispatch(setCredentials(user))
             reset();
         } catch (error: unknown) {
-
             setApiError(error as IBackendResponse);
-
         }
+    }
 
-        // const response = await api.post("Account/login", loginDTO, {
-        //     headers: {
-        //         Accept: "application/json",
-        //         "Content-Type": "application/json",
-        //     },
-        // });
-        // console.log(data);
-        // reset();
-        // console.log(response);
-    };
 
 
     return (

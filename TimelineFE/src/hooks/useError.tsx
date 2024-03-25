@@ -24,21 +24,10 @@ export const useError = () => {
         }] as IAlert[]))
 
     }
-    console.log(apiError)
-    // useEffect(() => {
-    //     if (apiError?.status == 500) {
-    //         const errors = apiError?.data?.map(e => {
-    //             return {
-    //                 severity: "error",
-    //                 message: e.description
-    //             };
-    //         });
-    //         dispatch(createErrorMsg(errors as IAlert[]))
-    //     }
-    // }, [apiError])
+
 
     const clearError = () => {
-        dispatch(resetState()); // Clear the stored errors in Redux state
+        dispatch(resetState());
         setApiError(null)
     };
 

@@ -1,6 +1,6 @@
-import { IUser } from "./IUser"
 
 export interface IUserResponse {
-    user: IUser
+    username: string
+    email: string
     token: string
 }

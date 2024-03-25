@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
@@ -7,12 +7,10 @@ import { Divider } from 'primereact/divider';
 import { classNames } from 'primereact/utils';
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-// import api from "../../API/axiosConfig"
 import { IRegistrationDTO } from '../../interfaces/IRegistrationDTO';
 import { useRegisterMutation } from '../../API/authAPI';
 import { setCredentials } from '../../redux/authSlice';
 import { useDispatch } from 'react-redux';
-import { IRegistrationError } from '../../interfaces/IRegistrationError';
 import { useError } from '../../hooks/useError';
 import { IBackendResponse } from '../../interfaces/IBackendResponse';
 

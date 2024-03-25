@@ -1,6 +1,5 @@
-import { IUser } from "./IUser"
-
 export interface IAuthState {
-    user: IUser | null
+    username: string | null
+    email: string | null
     token: string | null
 }
