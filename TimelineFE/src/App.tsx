@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage';
 import { Counter } from './pages/Testing';
 import RegistrationPage from './pages/RegistrationPage';
 import DashPage from './pages/DashPage';
+import CreateTimelinePage from './pages/CreateTimelinePage';
 
 
 
@@ -21,6 +22,11 @@ function App() {
         <Route path="/events" element={<Events />}></Route>
         <Route path="/dash" element={<DashPage />}></Route>
         <Route path="/testing" element={<Counter />}></Route>
+        <Route path="/timelines/*" element={
+          <Routes>
+            <Route path="create" element={<CreateTimelinePage />}></Route>
+          </Routes>}
+        ></Route>
         <Route path="*" element={<Navigate to="/" replace />}></Route>
       </Routes>
     </>

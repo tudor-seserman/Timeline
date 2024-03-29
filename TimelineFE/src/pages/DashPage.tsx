@@ -3,44 +3,16 @@ import { Button } from 'primereact/button';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { classNames } from 'primereact/utils';
 import { ITimeline } from '../interfaces/ITimeline';
-
-// interface Product {
-//     id: string;
-//     code: string;
-//     name: string;
-//     description: string;
-//     image: string;
-//     price: number;
-//     category: string;
-//     quantity: number;
-//     inventoryStatus: string;
-//     rating: number;
-// }
+import { useNavigate } from 'react-router-dom';
 
 export default function DashPage() {
-    const test: ITimeline = { id: "test", name: "test" };
-    const [timelines, setTimelines] = useState<ITimeline[]>([test, test, test, test, test, test, test, test, test]);
+    const navigate = useNavigate()
+    const [timelines, setTimelines] = useState<ITimeline[]>([]);
     const [layout, setLayout] = useState<"grid" | "list" | (string & Record<string, unknown>) | undefined>('grid');
 
     // useEffect(() => {
     //     ProductService.getProducts().then((data) => setProducts(data.slice(0, 12)));
     // }, []);
-
-    // const getSeverity = (product) => {
-    //     switch (product.inventoryStatus) {
-    //         case 'INSTOCK':
-    //             return 'success';
-
-    //         case 'LOWSTOCK':
-    //             return 'warning';
-
-    //         case 'OUTOFSTOCK':
-    //             return 'danger';
-
-    //         default:
-    //             return null;
-    //     }
-    // };
 
     const listItem = (timeline: ITimeline, index: number) => {
         return (
@@ -99,12 +71,14 @@ export default function DashPage() {
     };
 
     const listTemplate = (timelines: ITimeline[], layout?: 'list' | 'grid' | (string & Record<string, unknown>)) => {
+
         return <div className="grid grid-nogutter">{timelines.map((timeline, index) => itemTemplate(timeline, layout, index))}</div>;
     };
 
     const header = () => {
         return (
-            <div className="flex justify-content-end">
+            <div className="flex justify-between">
+                <Button label="Create Timeline" onClick={() => navigate("/timelines/create")} />
                 <DataViewLayoutOptions layout={layout} onChange={(e) => setLayout(e.value)} />
             </div>
         );
