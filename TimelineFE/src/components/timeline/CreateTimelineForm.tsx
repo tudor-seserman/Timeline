@@ -45,7 +45,7 @@ export default function CreateTimeLineForm() {
             reValidateMode: "onBlur",
             resolver: zodResolver(TimelineSchema),
             defaultValues: {
-                name: undefined,
+                name: "",
                 description: "",
                 dateStarted: new Date(),
                 dateFinished: new Date(),
@@ -113,14 +113,15 @@ export default function CreateTimeLineForm() {
 
                             <div className="field">
                                 <span className="p-float-label p-input-icon-right">
-                                    <Controller name="description"
+                                    <Controller
+                                        name="description"
                                         control={control}
                                         render={({ field }) => (
                                             <InputTextarea
                                                 id={field.name}
                                                 {...field} />
                                         )} />
-                                    <label htmlFor="email" className={classNames({ 'p-error': !!errors.description })}>Description</label>
+                                    <label htmlFor="description" className={classNames({ 'p-error': !!errors.description })}>Description</label>
                                 </span>
                                 {errors.description && <small className="p-error">{errors.description.message}</small>}
                             </div>
@@ -163,7 +164,7 @@ export default function CreateTimeLineForm() {
                                 </span>
                                 {errors.dateFinished && <small className="p-error">{errors.dateFinished.message}</small>}
                             </div>
-                            <Button loading={isSubmitting} className="mt-2" type="submit" label={isSubmitting ? "Sending..." : "Create Timeline"} />
+                            <Button loading={isSubmitting} className="bg-amber-400 mt-2" type="submit" label={isSubmitting ? "Sending..." : "Create Timeline"} />
 
                         </form>
                     </div>

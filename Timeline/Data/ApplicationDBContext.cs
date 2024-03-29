@@ -16,6 +16,7 @@ public class ApplicationDBContext : IdentityDbContext<AppUser>
     }
     
     public DbSet<TEvent> TEvents { get; set; }
+    public DbSet<Models.Timeline> Timelines { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseNpgsql(_configuration.GetConnectionString("TimelineContext"));
