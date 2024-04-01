@@ -8,6 +8,8 @@ using Timeline.Interfaces;
 using Timeline.Models;
 using Timeline.Service;
 using Microsoft.OpenApi.Models;
+using Timeline.Data.Repositories;
+using Timeline.Interfaces.Data;
 
 var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -45,6 +47,11 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+});
+
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("TimelineContext")));
 
@@ -70,10 +77,10 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultScheme =
-        options.DefaultAuthenticateScheme =
+    options.DefaultAuthenticateScheme =
+        options.DefaultChallengeScheme =
             options.DefaultForbidScheme =
-                options.DefaultChallengeScheme =
+                options.DefaultScheme =
                     options.DefaultSignInScheme =
                         options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
@@ -90,6 +97,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ITimelineRepository, TimelineRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -103,8 +111,9 @@ app.UseHttpsRedirection();
 
 app.UseCors(MyAllowSpecificOrigins);
 
-app.UseAuthorization();
+
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

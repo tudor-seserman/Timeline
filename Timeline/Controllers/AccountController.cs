@@ -26,13 +26,12 @@ namespace Timeline.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
+        public async Task<IActionResult> Login(LoginDTO loginDto)
         {
-            try
-            {
+            
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
-                var user = _userManager.Users.FirstOrDefault(x => x.UserName == loginDto.Username);
+                var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
                 if (user == null) return Unauthorized("Invalid Username!");
                 var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
                 
@@ -45,11 +44,6 @@ namespace Timeline.Controllers
                         Email = user.Email,
                         Token = _tokenService.CreateToken(user)
                     });
-            }catch (Exception e)
-            {
-                return StatusCode(500, e);
-            }
-
         }
 
         [HttpPost("register")]
