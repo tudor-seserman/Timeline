@@ -1,15 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
-import { Divider } from 'primereact/divider';
 import { classNames } from 'primereact/utils';
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useRegisterMutation } from '../../API/authAPI';
-import { useDispatch } from 'react-redux';
-import { useError } from '../../hooks/useError';
-import { IBackendResponse } from '../../interfaces/IBackendResponse';
 import { Card } from 'primereact/card';
 import ITimeline from '../../interfaces/ITimeline';
 import { InputTextarea } from 'primereact/inputtextarea';

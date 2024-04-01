@@ -10,8 +10,7 @@ const slice = createSlice({
             {
                 payload: alerts
             }: PayloadAction<IAlert[]>
-        ) =>
-            state = [...alerts]
+        ) => { state = [...alerts] }
         ,
         resetState: (state) =>
             state = null

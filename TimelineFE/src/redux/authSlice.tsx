@@ -7,7 +7,7 @@ import { IUserResponse } from '../interfaces/IUserResponse';
 
 const slice = createSlice({
   name: 'auth',
-  initialState: { username: null, email: null, token: null } as IAuthState,
+  initialState: { username: localStorage.getItem('username'), email: localStorage.getItem('email'), token: localStorage.getItem('token') } as IAuthState,
   reducers: {
     setCredentials: (
       state,
@@ -15,11 +15,15 @@ const slice = createSlice({
         payload: { username, email, token },
       }: PayloadAction<IUserResponse>,
     ) => {
+      localStorage.setItem("username", username)
+      localStorage.setItem("email", email)
+      localStorage.setItem('token', token)
       state.username = username;
       state.email = email;
       state.token = token;
     },
     logout: (state) => {
+      localStorage.clear()
       state.username = null
       state.email = null
       state.token = null

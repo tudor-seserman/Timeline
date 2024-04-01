@@ -23,6 +23,7 @@ public class TimelineRepository : ITimelineRepository
             DateCreated = ttimeline.TTimeline.DateCreated,
             DateStarted = ttimeline.TTimeline.DateStarted,
             DateFinished = ttimeline.TTimeline.DateFinished,
+            UserTTimelines = ttimeline.TTimeline.UserTTimelines,
             Events = ttimeline.TTimeline.Events,
             Creator = ttimeline.TTimeline.Creator,
 

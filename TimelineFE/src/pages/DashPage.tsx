@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import { useState, Key } from 'react';
 import { Button } from 'primereact/button';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { classNames } from 'primereact/utils';
-import { ITimeline } from '../interfaces/ITimeline';
 import { useNavigate } from 'react-router-dom';
+import ITimeline from '../interfaces/ITimeline';
+import { useGetAllUserTimelinesQuery } from '../API/authAPI';
 
 export default function DashPage() {
     const navigate = useNavigate()
-    const [timelines, setTimelines] = useState<ITimeline[]>([]);
+    const { data: timelines } = useGetAllUserTimelinesQuery();
     const [layout, setLayout] = useState<"grid" | "list" | (string & Record<string, unknown>) | undefined>('grid');
 
-    // useEffect(() => {
-    //     ProductService.getProducts().then((data) => setProducts(data.slice(0, 12)));
-    // }, []);
 
     const listItem = (timeline: ITimeline, index: number) => {
         return (
-            <div className="col-12" key={timeline.id}>
+            <div className="col-12" key={timeline.id as Key}>
                 <div className={classNames('flex flex-column xl:flex-row xl:align-items-start p-4 gap-4', { 'border-top-1 surface-border': index !== 0 })}>
                     {/* <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src={`https://primefaces.org/cdn/primereact/images/product/${product.image}`} alt={product.name} /> */}
                     <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
@@ -41,7 +39,7 @@ export default function DashPage() {
 
     const gridItem = (timeline: ITimeline) => {
         return (
-            <div className="col-12 sm:col-6 lg:col-12 xl:col-4 p-2" key={timeline.id}>
+            <div className="col-12 sm:col-6 lg:col-12 xl:col-4 p-2" key={timeline.id as Key}>
                 <div className="p-4 border-1 surface-border surface-card border-round">
                     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
                         {/*    <div className="flex align-items-center gap-2">
@@ -71,8 +69,8 @@ export default function DashPage() {
     };
 
     const listTemplate = (timelines: ITimeline[], layout?: 'list' | 'grid' | (string & Record<string, unknown>)) => {
-
-        return <div className="grid grid-nogutter">{timelines.map((timeline, index) => itemTemplate(timeline, layout, index))}</div>;
+        // timelines != null &&
+        return <div className="grid grid-nogutter">{timelines != null && timelines.map((timeline, index) => itemTemplate(timeline, layout, index))}</div>;
     };
 
     const header = () => {

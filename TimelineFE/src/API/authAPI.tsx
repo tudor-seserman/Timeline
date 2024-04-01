@@ -3,6 +3,7 @@ import { RootState } from '../redux/store'
 import { IRegistrationDTO } from '../interfaces/IRegistrationDTO'
 import { ILoginDTO } from '../interfaces/ILoginDTO'
 import { IUserResponse } from '../interfaces/IUserResponse'
+import { IBackendTimelinesDTO } from '../interfaces/IBackendTimelinesDTO'
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({
@@ -31,10 +32,13 @@ export const api = createApi({
                 body: credentials,
             }),
         }),
+        getAllUserTimelines: builder.query<IBackendTimelinesDTO[], void>({
+            query: () => '/Timeline',
+        }),
         protected: builder.mutation<{ message: string }, void>({
             query: () => 'protected',
         }),
     }),
 })
 
-export const { useRegisterMutation, useLoginMutation, useProtectedMutation } = api
+export const { useRegisterMutation, useLoginMutation, useProtectedMutation, useGetAllUserTimelinesQuery } = api
