@@ -4,6 +4,8 @@ import { IRegistrationDTO } from '../interfaces/IRegistrationDTO'
 import { ILoginDTO } from '../interfaces/ILoginDTO'
 import { IUserResponse } from '../interfaces/IUserResponse'
 import { IBackendTimelinesDTO } from '../interfaces/IBackendTimelinesDTO'
+import ICreateTimelineDto from '../interfaces/ICreateTimelineDTO'
+import { IBackendResponse } from '../interfaces/IBackendResponse'
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({
@@ -35,10 +37,17 @@ export const api = createApi({
         getAllUserTimelines: builder.query<IBackendTimelinesDTO[], void>({
             query: () => '/Timeline',
         }),
+        createTimeline: builder.mutation<IBackendResponse, ICreateTimelineDto>({
+            query: (dto) => ({
+                url: '/Timeline',
+                method: 'POST',
+                body: dto,
+            }),
+        }),
         protected: builder.mutation<{ message: string }, void>({
             query: () => 'protected',
         }),
     }),
 })
 
-export const { useRegisterMutation, useLoginMutation, useProtectedMutation, useGetAllUserTimelinesQuery } = api
+export const { useRegisterMutation, useLoginMutation, useProtectedMutation, useGetAllUserTimelinesQuery, useCreateTimelineMutation } = api

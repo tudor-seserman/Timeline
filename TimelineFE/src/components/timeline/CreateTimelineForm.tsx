@@ -10,6 +10,10 @@ import ITimeline from '../../interfaces/ITimeline';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Calendar } from 'primereact/calendar';
 import { ToggleButton, ToggleButtonChangeEvent } from 'primereact/togglebutton';
+import ICreateTimelineDto from '../../interfaces/ICreateTimelineDTO';
+import { useCreateTimelineMutation } from '../../API/authAPI';
+import { IBackendResponse } from '../../interfaces/IBackendResponse';
+import { useError } from '../../hooks/useError';
 
 const TimelineSchema = z.object({
     name: z.string().min(1),
@@ -23,9 +27,8 @@ export type TimelineSchemaValues = z.infer<typeof TimelineSchema>
 
 
 export default function CreateTimeLineForm() {
-    // const [register] = useRegisterMutation();
-    // const dispatch = useDispatch();
-    // const { setApiError } = useError();
+    const [createTimeline] = useCreateTimelineMutation();
+    const { setApiError } = useError();
     const [startTime, setStartTime] = useState(false);
     const [endTime, setEndTime] = useState(false);
 
@@ -48,7 +51,7 @@ export default function CreateTimeLineForm() {
         });
 
     const onSubmit: SubmitHandler<TimelineSchemaValues> = async (data) => {
-        const createTimelineDTO: ITimeline = {
+        const createTimelineDTO: ICreateTimelineDto = {
             name: data.name,
             description: data.description,
             dateCreated: new Date(),
@@ -56,15 +59,13 @@ export default function CreateTimeLineForm() {
             dateFinished: data.dateFinished,
         }
 
-        console.log(createTimelineDTO);
         reset();
-        // try {
-        //     const user = await register(registrationDTO).unwrap()
-        //     dispatch(setCredentials(user))
-        //     reset();
-        // } catch (error: unknown) {
-        //     setApiError(error as IBackendResponse);
-        // }
+        try {
+            await createTimeline(createTimelineDTO).unwrap()
+            reset();
+        } catch (error: unknown) {
+            setApiError(error as IBackendResponse);
+        }
     };
 
     // const passwordHeader = <h6>Pick a password</h6>;
