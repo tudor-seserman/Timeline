@@ -19,6 +19,7 @@ export const api = createApi({
             return headers
         },
     }),
+    tagTypes: ["Timelines"],
     endpoints: (builder) => ({
         login: builder.mutation<IUserResponse, ILoginDTO>({
             query: (credentials) => ({
@@ -36,6 +37,7 @@ export const api = createApi({
         }),
         getAllUserTimelines: builder.query<IBackendTimelinesDTO[], void>({
             query: () => '/Timeline',
+            providesTags: ["Timelines"],
         }),
         createTimeline: builder.mutation<IBackendResponse, ICreateTimelineDto>({
             query: (dto) => ({
@@ -43,6 +45,7 @@ export const api = createApi({
                 method: 'POST',
                 body: dto,
             }),
+            invalidatesTags: ["Timelines"]
         }),
         protected: builder.mutation<{ message: string }, void>({
             query: () => 'protected',

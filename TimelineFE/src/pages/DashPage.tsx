@@ -8,7 +8,7 @@ import { useGetAllUserTimelinesQuery } from '../API/authAPI';
 
 export default function DashPage() {
     const navigate = useNavigate()
-    const { data: timelines } = useGetAllUserTimelinesQuery();
+    const { data: timelines = [] } = useGetAllUserTimelinesQuery();
     const [layout, setLayout] = useState<"grid" | "list" | (string & Record<string, unknown>) | undefined>('grid');
 
 
@@ -69,8 +69,7 @@ export default function DashPage() {
     };
 
     const listTemplate = (timelines: ITimeline[], layout?: 'list' | 'grid' | (string & Record<string, unknown>)) => {
-        // timelines != null &&
-        return <div className="grid grid-nogutter">{timelines != null && timelines.map((timeline, index) => itemTemplate(timeline, layout, index))}</div>;
+        return <div className="grid grid-nogutter">{timelines.map((timeline, index) => itemTemplate(timeline, layout, index))}</div>;
     };
 
     const header = () => {
