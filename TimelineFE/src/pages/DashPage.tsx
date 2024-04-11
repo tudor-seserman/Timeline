@@ -1,16 +1,35 @@
-import { useState, Key } from 'react';
+import { useState, Key, useEffect, useRef } from 'react';
 import { Button } from 'primereact/button';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { classNames } from 'primereact/utils';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ITimeline from '../interfaces/ITimeline';
 import { useGetAllUserTimelinesQuery } from '../API/authAPI';
+import { faTimeline } from "@fortawesome/free-solid-svg-icons"
+import { Link } from "react-router-dom";
+import { Toast } from 'primereact/toast';
 
 export default function DashPage() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    let location = useLocation();
     const { data: timelines = [] } = useGetAllUserTimelinesQuery();
     const [layout, setLayout] = useState<"grid" | "list" | (string & Record<string, unknown>) | undefined>('grid');
+    const toast = useRef<Toast>(null);
 
+    const show = (detailParm: string,) => {
+        toast.current?.show({ severity: "error", summary: 'Info', detail: detailParm });
+    };
+
+    useEffect(() => {
+        console.log(location.state.timelineError);
+        show(location.state.timelineError);
+    }, [location]);
+
+    interface ButtonLinkProps {
+        timelineId: Number | undefined;
+    }
+    const ButtonLink: React.FC<ButtonLinkProps> = ({ timelineId }) => { return <Link to={`/timelines/${timelineId}`} className="btn" ><FontAwesomeIcon icon={faTimeline} /> Select</Link> };
 
     const listItem = (timeline: ITimeline, index: number) => {
         return (
@@ -29,7 +48,7 @@ export default function DashPage() {
                             </div> */}
                         </div>
                         <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-                            <Button className="p-button-rounded"></Button>
+                            <ButtonLink timelineId={timeline.id} />
                         </div>
                     </div>
                 </div>
@@ -53,7 +72,7 @@ export default function DashPage() {
                         <div className="text-2xl font-bold">{timeline.name}</div>
                     </div>
                     <div className="flex align-items-center justify-content-between">
-                        <Button className="p-button-rounded" ></Button>
+                        <ButtonLink timelineId={timeline.id} />
                     </div>
                 </div>
             </div >
@@ -83,6 +102,7 @@ export default function DashPage() {
 
     return (
         <div className="card">
+            <Toast ref={toast} position="center" />
             <DataView value={timelines} listTemplate={listTemplate} layout={layout as "grid" | "list" | (string & Record<string, unknown>) | undefined} header={header()} />
         </div>
     )

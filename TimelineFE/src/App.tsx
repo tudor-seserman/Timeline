@@ -7,6 +7,7 @@ import { Counter } from './pages/Testing';
 import RegistrationPage from './pages/RegistrationPage';
 import DashPage from './pages/DashPage';
 import CreateTimelinePage from './pages/CreateTimelinePage';
+import TimelinePage from './pages/TimelinePage';
 
 
 
@@ -25,6 +26,7 @@ function App() {
         <Route path="/timelines/*" element={
           <Routes>
             <Route path="create" element={<CreateTimelinePage />}></Route>
+            <Route path="/:timelineId" element={<TimelinePage />}></Route>
           </Routes>}
         ></Route>
         <Route path="*" element={<Navigate to="/" replace />}></Route>

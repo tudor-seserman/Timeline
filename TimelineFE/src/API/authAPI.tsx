@@ -39,6 +39,9 @@ export const api = createApi({
             query: () => '/Timeline',
             providesTags: ["Timelines"],
         }),
+        getTimeline: builder.query<IBackendTimelinesDTO, string>({
+            query: (timeLineId) => `/Timeline/${timeLineId}`,
+        }),
         createTimeline: builder.mutation<IBackendResponse, ICreateTimelineDto>({
             query: (dto) => ({
                 url: '/Timeline',
@@ -53,4 +56,10 @@ export const api = createApi({
     }),
 })
 
-export const { useRegisterMutation, useLoginMutation, useProtectedMutation, useGetAllUserTimelinesQuery, useCreateTimelineMutation } = api
+export const { useRegisterMutation,
+    useLoginMutation,
+    useProtectedMutation,
+    useGetAllUserTimelinesQuery,
+    useCreateTimelineMutation,
+    useGetTimelineQuery,
+} = api

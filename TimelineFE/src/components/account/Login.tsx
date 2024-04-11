@@ -12,6 +12,7 @@ import { useError } from '../../hooks/useError';
 import { IBackendResponse } from '../../interfaces/IBackendResponse';
 import { setCredentials } from '../../redux/authSlice';
 import { Card } from 'primereact/card';
+import { useNavigate } from 'react-router-dom';
 
 const LoginSchema = z.object({
     username: z.string(),
@@ -33,6 +34,8 @@ export const Login = () => {
     const [login] = useLoginMutation();
     const dispatch = useDispatch();
     const { setApiError } = useError();
+    const navigate = useNavigate();
+
 
     const { control,
         formState: { errors, isSubmitting },
@@ -57,6 +60,7 @@ export const Login = () => {
             const user = await login(loginDTO).unwrap()
             dispatch(setCredentials(user))
             reset();
+            navigate("/dash");
         } catch (error: unknown) {
             setApiError(error as IBackendResponse);
         }
