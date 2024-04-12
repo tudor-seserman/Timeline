@@ -5,7 +5,7 @@ import { classNames } from 'primereact/utils';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ITimeline from '../interfaces/ITimeline';
-import { useGetAllUserTimelinesQuery } from '../API/authAPI';
+import { useGetAllUserTimelinesQuery } from '../API/RTKAPI';
 import { faTimeline } from "@fortawesome/free-solid-svg-icons"
 import { Link } from "react-router-dom";
 import { Toast } from 'primereact/toast';
@@ -22,8 +22,9 @@ export default function DashPage() {
     };
 
     useEffect(() => {
-        console.log(location.state.timelineError);
-        show(location.state.timelineError);
+        if (location.state != null) {
+            show(location.state.timelineError);
+        }
     }, [location]);
 
     interface ButtonLinkProps {

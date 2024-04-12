@@ -6,7 +6,7 @@ import { classNames } from 'primereact/utils';
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { ILoginDTO } from '../../interfaces/ILoginDTO';
-import { useLoginMutation } from '../../API/authAPI';
+import { useLoginMutation } from '../../API/RTKAPI';
 import { useDispatch } from 'react-redux';
 import { useError } from '../../hooks/useError';
 import { IBackendResponse } from '../../interfaces/IBackendResponse';

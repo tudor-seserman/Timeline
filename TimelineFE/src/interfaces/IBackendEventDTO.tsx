@@ -1,4 +1,5 @@
-export default interface ICreateTimelineDto {
+export interface IBackendEventDTO {
+    id: Number
     name: string
     description?: string
     dateCreated?: Date

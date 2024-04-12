@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { api } from "../API/authAPI"
+import { api } from "../API/RTKAPI"
 import authReducer from './authSlice'
 import errorAlertReducer from './errorAlertSlice'
 import timelinesReducer from './timelinesSlice'

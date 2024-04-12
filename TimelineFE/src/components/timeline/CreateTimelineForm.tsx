@@ -11,7 +11,7 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { Calendar } from 'primereact/calendar';
 import { ToggleButton, ToggleButtonChangeEvent } from 'primereact/togglebutton';
 import ICreateTimelineDto from '../../interfaces/ICreateTimelineDTO';
-import { useCreateTimelineMutation } from '../../API/authAPI';
+import { useCreateTimelineMutation } from '../../API/RTKAPI';
 import { IBackendResponse } from '../../interfaces/IBackendResponse';
 import { useError } from '../../hooks/useError';
 
@@ -68,20 +68,6 @@ export default function CreateTimeLineForm() {
         }
     };
 
-    // const passwordHeader = <h6>Pick a password</h6>;
-    // const passwordFooter = (
-    //     <React.Fragment>
-    //         <Divider />
-    //         <p className="mt-2">Suggestions</p>
-    //         <ul className="pl-2 ml-2 mt-0" style={{ lineHeight: '1.5' }}>
-    //             <li>At least one lowercase</li>
-    //             <li>At least one uppercase</li>
-    //             <li>At least one numeric</li>
-    //             <li>At least one special character</li>
-    //             <li>Minimum 8 characters</li>
-    //         </ul>
-    //     </React.Fragment>
-    // );
 
     return (
         <Card className="bg-cyan-600" title="Create Timeline">

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -75,10 +76,11 @@ namespace Timeline.Controllers
 
         // POST: api/Event
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<TEvent>> PostTEvent(TEvent tEvent)
         {
-            Console.WriteLine(tEvent);
+            Console.WriteLine("tEventtEventtEventtEventtEventtEventtEventtEvent");
             _context.TEvents.Add(tEvent);
             await _context.SaveChangesAsync();
 

@@ -58,6 +58,29 @@ namespace Timeline.Controllers
 
             return tTimeline;
         }
+        
+        // GET: api/Timeline/Events/5
+        [Authorize]
+        [HttpGet("Events/{id}")]
+        public async Task<ActionResult<List<TEvent>>> GetTTimelineEvents(int id)
+        {
+            var tTimeline = await _context.TTimelines.FindAsync(id);
+            
+            tTimeline.Events.ForEach(x=>Console.WriteLine(x.Description));
+            Console.WriteLine("Done");
+
+            if (tTimeline == null)
+            {
+                return NotFound();
+            }
+
+            if (!tTimeline.Events.Any())
+            {
+                return NotFound();
+            }
+
+            return tTimeline.Events;
+        }
 
         // PUT: api/Timeline/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

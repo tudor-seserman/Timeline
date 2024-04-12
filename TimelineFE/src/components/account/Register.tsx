@@ -8,7 +8,7 @@ import { classNames } from 'primereact/utils';
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { IRegistrationDTO } from '../../interfaces/IRegistrationDTO';
-import { useRegisterMutation } from '../../API/authAPI';
+import { useRegisterMutation } from '../../API/RTKAPI';
 import { setCredentials } from '../../redux/authSlice';
 import { useDispatch } from 'react-redux';
 import { useError } from '../../hooks/useError';
