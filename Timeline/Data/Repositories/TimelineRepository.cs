@@ -30,6 +30,49 @@ public class TimelineRepository : ITimelineRepository
         }).ToListAsync();
     }
 
+    public async Task<TTimeline> GetTimelineEventsAsyncFromTimelineId(int id)
+    {
+        var timeline = await _context.TTimelines.Where(t => t.Id == id)
+            .Select(ttimeline => new TTimeline()
+            {
+                Id = ttimeline.Id,
+                Name = ttimeline.Name,
+                DateCreated = ttimeline.DateCreated,
+                DateStarted = ttimeline.DateStarted,
+                DateFinished = ttimeline.DateFinished,
+                UserTTimelines = ttimeline.UserTTimelines,
+                Events = ttimeline.Events.Select(e=> new
+                    TEvent(){
+                        Id = e.Id,
+                        Name = e.Name,
+                        Description = e.Description,
+                        DateStarted = e.DateStarted,
+                        DateFinished = e.DateFinished,
+                        DateCreated = e.DateCreated
+                    }
+                        ).ToList(),
+            })
+            .FirstOrDefaultAsync();
+
+        if (timeline == null!)
+        {
+            return null;
+        }
+        
+        return timeline;
+    }
+
+    public async Task<TTimeline> GetAsyncTTimelineById(int id)
+    {
+        var timeline = await _context.TTimelines.FirstOrDefaultAsync(t=>t.Id==id);
+        if (timeline is null)
+        {
+            return null;
+        }
+
+        return timeline;
+    }
+
     public async Task<TTimeline> CreateAsyncTTimeline(TTimeline timeline)
     {
         await _context.TTimelines.AddAsync(timeline);

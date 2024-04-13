@@ -64,12 +64,9 @@ namespace Timeline.Controllers
         [HttpGet("Events/{id}")]
         public async Task<ActionResult<List<TEvent>>> GetTTimelineEvents(int id)
         {
-            var tTimeline = await _context.TTimelines.FindAsync(id);
+            var tTimeline = await _timelineRepository.GetTimelineEventsAsyncFromTimelineId(id);
             
-            tTimeline.Events.ForEach(x=>Console.WriteLine(x.Description));
-            Console.WriteLine("Done");
-
-            if (tTimeline == null)
+            if (tTimeline == null!)
             {
                 return NotFound();
             }

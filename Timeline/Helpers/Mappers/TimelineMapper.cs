@@ -18,4 +18,18 @@ public static class TimelineMapper
             AppUserId = appUser.Id
         };
     }
+    
+    public static TEvent toTEventFromAuthorizedCreateDTO(this CreateEventDTO createEvent, TTimeline timeline)
+    {
+        return new TEvent()
+        {
+            DateCreated = createEvent.DateCreated,
+            DateStarted = createEvent.DateStarted,
+            DateFinished = createEvent.DateFinished,
+            Description = createEvent.Description,
+            Name = createEvent.Name,
+            TTimelineId = createEvent.TTimelineId,
+            TTimeline = timeline,
+        };
+    }
 }

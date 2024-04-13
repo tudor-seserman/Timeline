@@ -21,7 +21,7 @@ export const api = createApi({
             return headers
         },
     }),
-    tagTypes: ["Timelines"],
+    tagTypes: ["Timelines","Events"],
     endpoints: (builder) => ({
         login: builder.mutation<IUserResponse, ILoginDTO>({
             query: (credentials) => ({
@@ -43,6 +43,7 @@ export const api = createApi({
         }),
         getAllTimelineEvents: builder.query<IBackendEventDTO[], Number>({
             query: (timelineId) => `/Timeline/Events/${timelineId}`,
+            providesTags: ["Events"],
         }),
         getTimeline: builder.query<IBackendTimelinesDTO, string>({
             query: (timeLineId) => `/Timeline/${timeLineId}`,
@@ -61,7 +62,7 @@ export const api = createApi({
                 method: 'POST',
                 body: dto,
             }),
-            invalidatesTags: ["Timelines"]
+            invalidatesTags: ["Events"]
         }),
         protected: builder.mutation<{ message: string }, void>({
             query: () => 'protected',

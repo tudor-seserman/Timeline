@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Timeline.Data;
+using Timeline.Helpers.DTOs.Timeline;
+using Timeline.Helpers.Mappers;
+using Timeline.Interfaces.Data;
 using Timeline.Models;
 
 namespace Timeline.Controllers
@@ -16,10 +19,12 @@ namespace Timeline.Controllers
     public class EventController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
+        private readonly ITimelineRepository _timelineRepository;
 
-        public EventController(ApplicationDBContext context)
+        public EventController(ApplicationDBContext context,ITimelineRepository timelineRepository)
         {
             _context = context;
+            _timelineRepository = timelineRepository;
         }
 
         // GET: api/Event
@@ -78,13 +83,30 @@ namespace Timeline.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<TEvent>> PostTEvent(TEvent tEvent)
+        public async Task<ActionResult<TEvent>> PostTEvent(CreateEventDTO createEvent)
         {
-            Console.WriteLine("tEventtEventtEventtEventtEventtEventtEventtEvent");
-            _context.TEvents.Add(tEvent);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            try
+            {
+                var eventTimeline = await _timelineRepository.GetAsyncTTimelineById(createEvent.TTimelineId);
+                if (eventTimeline == null!)
+                {
+                    return StatusCode(500, "Cannot locate timeline");
+                }
 
-            return CreatedAtAction("GetTEvent", new { id = tEvent.Id }, tEvent);
+                TEvent newEvent = createEvent.toTEventFromAuthorizedCreateDTO(eventTimeline);
+                _context.TEvents.Add(newEvent);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetTEvent", new { id = newEvent.Id }, newEvent);
+
+
+            }catch (Exception e)
+            {
+                return StatusCode(500, e);
+            }
         }
 
         // DELETE: api/Event/5
