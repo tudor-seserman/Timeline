@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Timeline.Data;
 using Timeline.Data.Repositories;
 using Timeline.Helpers.DTOs.Timeline;
@@ -66,17 +67,13 @@ namespace Timeline.Controllers
         {
             var tTimeline = await _timelineRepository.GetTimelineEventsAsyncFromTimelineId(id);
             
-            if (tTimeline == null!)
+            if (tTimeline.IsNullOrEmpty())
             {
                 return NotFound();
             }
+            
 
-            if (!tTimeline.Events.Any())
-            {
-                return NotFound();
-            }
-
-            return tTimeline.Events;
+            return tTimeline;
         }
 
         // PUT: api/Timeline/5

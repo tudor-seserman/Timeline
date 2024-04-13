@@ -5,7 +5,7 @@ namespace Timeline.Interfaces.Data;
 public interface ITimelineRepository
 {
     Task<List<TTimeline>> GetUserTTimelines(AppUser appUser);
-    Task<TTimeline> GetTimelineEventsAsyncFromTimelineId(int id);
+    Task<List<TEvent>> GetTimelineEventsAsyncFromTimelineId(int id);
     Task<TTimeline> CreateAsyncTTimeline(TTimeline timeline);
     Task<TTimeline> GetAsyncTTimelineById(int id);
     
