@@ -1,30 +1,20 @@
-import React from 'react';
+import { useRef, useState } from 'react';
 import { Timeline } from 'primereact/timeline';
-import { Card } from 'primereact/card';
-import { Button } from 'primereact/button';
 import { useGetAllTimelineEventsQuery } from '../../API/RTKAPI'
 import IEvent from '../../interfaces/IEvent';
+import { Card } from 'primereact/card';
+import { OverlayPanel } from 'primereact/overlaypanel';
+import EventOverlay from './EventOverlay';
 
-interface TimelineEvent {
-    status?: string;
-    date?: string;
-    icon?: string;
-    color?: string;
-    image?: string;
-}
+
 interface TimelineEventsProps {
     timelineId?: Number
 }
 
 export default function TimelineEvents({ timelineId }: TimelineEventsProps) {
-    const { data } = useGetAllTimelineEventsQuery(timelineId as Number)
+    const { data, isSuccess } = useGetAllTimelineEventsQuery(timelineId as Number)
+    const [event, setEvent] = useState<IEvent | null>(null)
 
-    // [
-    //     { status: 'Ordered', date: '15/10/2020 10:30', icon: 'pi pi-shopping-cart', color: '#9C27B0', },
-    //     { status: 'Processing', date: '15/10/2020 14:00', icon: 'pi pi-cog', color: '#673AB7' },
-    //     { status: 'Shipped', date: '15/10/2020 16:15', icon: 'pi pi-shopping-cart', color: '#FF9800' },
-    //     { status: 'Delivered', date: '16/10/2020 10:00', icon: 'pi pi-check', color: '#607D8B' }
-    // ];
 
     // const customizedMarker = (item: IEvent) => {
     //     return (
@@ -34,21 +24,33 @@ export default function TimelineEvents({ timelineId }: TimelineEventsProps) {
     //     );
     // };
 
+    const opRef = useRef<OverlayPanel | null>(null);
+
+    const handleCardClick = (e: React.MouseEvent<HTMLDivElement>, item: IEvent) => {
+        if (opRef.current) {
+            opRef.current.toggle(e);
+            setEvent(item)
+        }
+    };
+
+
     const customizedContent = (item: IEvent) => {
+
         return (
-            <Card title={item.name} subTitle={item.description}>
-                {/* {item.image && <img src={`https://primefaces.org/cdn/primereact/images/product/${item.image}`} alt={item.image} width={200} className="shadow-1" />}
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
-                    quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
-                <Button label="Read more" className="p-button-text"></Button> */}
-            </Card>
+            <div>
+                <Card title={item.name} subTitle={item.description} onClick={(e) => handleCardClick(e, item)}>
+                </Card>
+            </div>
         );
     };
 
-    return (
-        <div className="card">
-            {/* <Timeline value={events} align="alternate" className="customized-timeline" marker={customizedMarker} content={customizedContent} /> */}
+    return (<>
+        {isSuccess && <div className="card">
             <Timeline value={data} align="alternate" className="customized-timeline" content={customizedContent} />
-        </div>
+            <OverlayPanel ref={opRef}>
+                {event && <EventOverlay event={event} setEvent={setEvent} />}
+            </OverlayPanel>
+        </div>}
+    </>
     )
 }

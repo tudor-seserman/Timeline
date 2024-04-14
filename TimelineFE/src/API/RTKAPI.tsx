@@ -21,7 +21,7 @@ export const api = createApi({
             return headers
         },
     }),
-    tagTypes: ["Timelines","Events"],
+    tagTypes: ["Timelines", "Events"],
     endpoints: (builder) => ({
         login: builder.mutation<IUserResponse, ILoginDTO>({
             query: (credentials) => ({
@@ -64,6 +64,13 @@ export const api = createApi({
             }),
             invalidatesTags: ["Events"]
         }),
+        deleteEvent: builder.mutation<IBackendResponse, Number>({
+            query: (id) => ({
+                url: `/Event/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ["Events"]
+        }),
         protected: builder.mutation<{ message: string }, void>({
             query: () => 'protected',
         }),
@@ -74,8 +81,9 @@ export const { useRegisterMutation,
     useLoginMutation,
     useProtectedMutation,
     useGetAllUserTimelinesQuery,
-    useCreateTimelineMutation,
     useCreateEventMutation,
     useGetTimelineQuery,
     useGetAllTimelineEventsQuery,
+    useCreateTimelineMutation,
+    useDeleteEventMutation
 } = api
