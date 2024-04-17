@@ -1,5 +1,4 @@
 import { SubmitHandler } from 'react-hook-form';
-import * as z from "zod";
 import { Card } from 'primereact/card';
 import { useCreateEventMutation, } from '../../API/RTKAPI';
 import { IBackendResponse } from '../../interfaces/IBackendResponse';
@@ -7,16 +6,15 @@ import { useError } from '../../hooks/useError';
 import ICreateEventDto from '../../interfaces/ICreateEventDto';
 import { Panel } from 'primereact/panel';
 import EventForm, { EventSchemaValues } from './EventForm';
-import { useRef } from 'react';
 
-interface CreateEventFormProps {
+
+interface EditEventFormProps {
     timelineId: Number | undefined
 }
 
-export default function CreateEventForm({ timelineId }: CreateEventFormProps) {
+export default function EditEventForm({ timelineId }: EditEventFormProps) {
     const [createEvent, { isSuccess }] = useCreateEventMutation();
     const { setApiError } = useError();
-    const menu = useRef<Panel>(null);
 
     const onSubmit: SubmitHandler<EventSchemaValues> = async (data) => {
         const createEventDTO: ICreateEventDto = {
@@ -29,8 +27,7 @@ export default function CreateEventForm({ timelineId }: CreateEventFormProps) {
         }
 
         try {
-            await createEvent(createEventDTO).unwrap();
-            menu.current?.collapse(undefined);
+            await createEvent(createEventDTO).unwrap()
         } catch (error: unknown) {
             setApiError(error as IBackendResponse);
         }
@@ -38,12 +35,12 @@ export default function CreateEventForm({ timelineId }: CreateEventFormProps) {
 
 
     return (
-        <Panel toggleable collapsed ref={menu} header="Add Event">
+        <Panel toggleable collapsed header="Add Event">
             <Card className="bg-cyan-600" title="Create Event">
                 <div className="registration-form">
                     <div className="flex justify-content-center">
                         <div className="card mt-2 mb-1.5 ">
-                            <EventForm submitHandler={onSubmit} success={isSuccess} action="Create" />
+                            <EventForm submitHandler={onSubmit} success={isSuccess} action="Edit" />
                         </div>
                     </div>
                 </div>

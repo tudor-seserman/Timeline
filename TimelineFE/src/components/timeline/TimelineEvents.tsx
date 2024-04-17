@@ -48,7 +48,7 @@ export default function TimelineEvents({ timelineId }: TimelineEventsProps) {
         {isSuccess && <div className="card">
             <Timeline value={data} align="alternate" className="customized-timeline" content={customizedContent} />
             <OverlayPanel ref={opRef}>
-                {event && <EventOverlay event={event} setEvent={setEvent} />}
+                {event && <EventOverlay event={event} setEvent={setEvent} timelineId={timelineId} />}
             </OverlayPanel>
         </div>}
     </>
