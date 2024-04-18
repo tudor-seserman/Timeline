@@ -20,14 +20,17 @@ namespace Timeline.Controllers
     {
         private readonly ApplicationDBContext _context;
         private readonly ITimelineRepository _timelineRepository;
+        private readonly IEventRepository _eventRepository;
 
-        public EventController(ApplicationDBContext context,ITimelineRepository timelineRepository)
+        public EventController(ApplicationDBContext context,ITimelineRepository timelineRepository, IEventRepository eventRepository)
         {
             _context = context;
             _timelineRepository = timelineRepository;
+            _eventRepository = eventRepository;
         }
 
         // GET: api/Event
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TEvent>>> GetTEvents()
         {
@@ -35,6 +38,7 @@ namespace Timeline.Controllers
         }
 
         // GET: api/Event/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<TEvent>> GetTEvent(int id)
         {
@@ -50,19 +54,19 @@ namespace Timeline.Controllers
 
         // PUT: api/Event/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTEvent(int id, TEvent tEvent)
+        public async Task<IActionResult> PutTEvent(int id, EditEventDTO editEventDto)
         {
-            if (id != tEvent.Id)
+            if (id != editEventDto.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(tEvent).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                var updateAsync = await _eventRepository.UpdateAsync(id, editEventDto);
+                return Ok(updateAsync);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -110,6 +114,7 @@ namespace Timeline.Controllers
         }
 
         // DELETE: api/Event/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTEvent(int id)
         {
@@ -120,11 +125,12 @@ namespace Timeline.Controllers
             }
 
             _context.TEvents.Remove(tEvent);
-            await _context.SaveChangesAsync();
+           await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok();
         }
-
+        
+        [Authorize]
         private bool TEventExists(int id)
         {
             return _context.TEvents.Any(e => e.Id == id);

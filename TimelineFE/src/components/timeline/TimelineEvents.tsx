@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Timeline } from 'primereact/timeline';
 import { useGetAllTimelineEventsQuery } from '../../API/RTKAPI'
 import IEvent from '../../interfaces/IEvent';
@@ -26,6 +26,14 @@ export default function TimelineEvents({ timelineId }: TimelineEventsProps) {
 
     const opRef = useRef<OverlayPanel | null>(null);
 
+    // useEffect(() => {
+    //     if (isSuccess && opRef.current) {
+    //         ;
+    //     }
+    // }, [isSuccess])
+
+    const toggle = () => { if (opRef.current) { opRef.current.toggle(null) } };
+
     const handleCardClick = (e: React.MouseEvent<HTMLDivElement>, item: IEvent) => {
         if (opRef.current) {
             opRef.current.toggle(e);
@@ -48,7 +56,7 @@ export default function TimelineEvents({ timelineId }: TimelineEventsProps) {
         {isSuccess && <div className="card">
             <Timeline value={data} align="alternate" className="customized-timeline" content={customizedContent} />
             <OverlayPanel ref={opRef}>
-                {event && <EventOverlay event={event} setEvent={setEvent} timelineId={timelineId} />}
+                {event && <EventOverlay event={event} setEvent={setEvent} toggle={toggle} />}
             </OverlayPanel>
         </div>}
     </>

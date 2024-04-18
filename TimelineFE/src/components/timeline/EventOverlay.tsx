@@ -13,10 +13,10 @@ import EditEventForm from "./EditEventForm"
 interface EventOverlayProps {
     event: IEvent
     setEvent: Dispatch<SetStateAction<IEvent | null>>;
-    timelineId: Number;
+    toggle: () => null
 }
 
-export default function EventOverlay({ event, setEvent, timelineId }: EventOverlayProps) {
+export default function EventOverlay({ event, setEvent, toggle }: EventOverlayProps) {
     const toast = useRef(null);
     const [deleteEvent] = useDeleteEventMutation();
     const [editMode, setEditMode] = useState(false);
@@ -78,7 +78,7 @@ export default function EventOverlay({ event, setEvent, timelineId }: EventOverl
                 </div>
             </Card>
             <div hidden={!editMode} >
-                <EditEventForm timelineId={timelineId} editToggle={handleEdit} event={event} />
+                <EditEventForm editToggle={handleEdit} event={event} toggle={toggle} />
             </div>
         </>
     )

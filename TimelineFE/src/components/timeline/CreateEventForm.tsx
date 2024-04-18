@@ -1,5 +1,4 @@
 import { SubmitHandler } from 'react-hook-form';
-import * as z from "zod";
 import { Card } from 'primereact/card';
 import { useCreateEventMutation, } from '../../API/RTKAPI';
 import { IBackendResponse } from '../../interfaces/IBackendResponse';

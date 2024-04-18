@@ -1,6 +1,6 @@
 import { SubmitHandler } from 'react-hook-form';
 import { Card } from 'primereact/card';
-import { useCreateEventMutation, useEditEventMutation, } from '../../API/RTKAPI';
+import { useEditEventMutation, } from '../../API/RTKAPI';
 import { IBackendResponse } from '../../interfaces/IBackendResponse';
 import { useError } from '../../hooks/useError';
 import EventForm, { EventSchemaValues } from './EventForm';
@@ -12,17 +12,20 @@ import IEditEventDTO from '../../interfaces/IEditEventDTO';
 
 
 interface EditEventFormProps {
-    timelineId: Number | undefined,
     editToggle: () => void,
     event: IEvent
+    toggle: () => void
 }
 
-export default function EditEventForm({ timelineId, editToggle, event }: EditEventFormProps) {
+export default function EditEventForm({ editToggle, event, toggle }: EditEventFormProps) {
     const [editEvent, { isSuccess }] = useEditEventMutation();
     const { setApiError } = useError();
 
     const onSubmit: SubmitHandler<EventSchemaValues> = async (data) => {
+        const id = event.id as Number;
+
         const editEventDTO: IEditEventDTO = {
+            id: id,
             name: data.name,
             description: data.description,
             dateStarted: data.dateStarted,
@@ -30,9 +33,9 @@ export default function EditEventForm({ timelineId, editToggle, event }: EditEve
         }
 
         try {
-            const id = event.id as Number;
             await editEvent({ id, editEventDTO }).unwrap()
-            editToggle();
+            // editToggle();
+            toggle();
         } catch (error: unknown) {
             setApiError(error as IBackendResponse);
         }
