@@ -34,7 +34,6 @@ export default function EditEventForm({ editToggle, event, toggle }: EditEventFo
 
         try {
             await editEvent({ id, editEventDTO }).unwrap()
-            // editToggle();
             toggle();
         } catch (error: unknown) {
             setApiError(error as IBackendResponse);

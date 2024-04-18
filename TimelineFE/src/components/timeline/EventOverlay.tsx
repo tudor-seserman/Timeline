@@ -11,9 +11,9 @@ import EditEventForm from "./EditEventForm"
 
 
 interface EventOverlayProps {
-    event: IEvent
+    event: IEvent;
     setEvent: Dispatch<SetStateAction<IEvent | null>>;
-    toggle: () => null
+    toggle: () => void;
 }
 
 export default function EventOverlay({ event, setEvent, toggle }: EventOverlayProps) {
@@ -44,7 +44,6 @@ export default function EventOverlay({ event, setEvent, toggle }: EventOverlayPr
     };
 
     const handleEdit = () => { setEditMode(!editMode); };
-
 
     return (
         <>

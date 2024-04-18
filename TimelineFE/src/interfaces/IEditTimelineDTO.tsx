@@ -1,7 +1,7 @@
-export default interface ICreateTimelineDTO {
+export default interface IEditTimelineDTO {
+    id: Number
     name: string
     description?: string
-    dateCreated?: Date
     dateStarted?: Date
     dateFinished?: Date
 }
