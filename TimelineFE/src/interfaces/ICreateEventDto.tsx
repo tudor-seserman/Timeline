@@ -1,4 +1,4 @@
-export default interface ICreateEventDto {
+export default interface ICreateEventDTO {
     name: string
     description?: string
     dateCreated?: Date

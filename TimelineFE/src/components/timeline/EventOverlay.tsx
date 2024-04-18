@@ -7,7 +7,7 @@ import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup"
 import { Toast } from "primereact/toast"
 import { useRef, Dispatch, SetStateAction, useState } from "react"
 import { useDeleteEventMutation } from "../../API/RTKAPI"
-import CreateEventForm from "./CreateEventForm"
+import EditEventForm from "./EditEventForm"
 
 
 interface EventOverlayProps {
@@ -50,7 +50,7 @@ export default function EventOverlay({ event, setEvent, timelineId }: EventOverl
         <>
             <Toast ref={toast} />
             <ConfirmPopup className="bg-yellow-200 text-gray-700 border-0 rounded-md shadow-lg z-40 mt-3 p-1" pt={{ footer: { style: { display: "flex", justifyContent: "space-between", } } }} />
-            <Card title={event.name} subTitle={event.description} hidden={!editMode}>
+            <Card title={event.name} subTitle={event.description} hidden={editMode}>
                 <p className="m-0">
                     Finish Date: {new Date(event?.dateFinished as Date).toLocaleString()} <br />
                     Start Date: {new Date(event?.dateStarted as Date).toLocaleString()} <br />
@@ -77,18 +77,9 @@ export default function EventOverlay({ event, setEvent, timelineId }: EventOverl
                     </Button>
                 </div>
             </Card>
-            <Card hidden={editMode} >
-                <CreateEventForm timelineId={timelineId} />
-                <Button
-                    onClick={handleEdit}
-                    raised
-                    size="large"
-                    severity="info"
-                    label="Save Edit"
-                    className=" bg-yellow-300 p-1" >
-                    <FontAwesomeIcon className="p-1" icon={faPencil} />
-                </Button>
-            </Card>
+            <div hidden={!editMode} >
+                <EditEventForm timelineId={timelineId} editToggle={handleEdit} event={event} />
+            </div>
         </>
     )
 }

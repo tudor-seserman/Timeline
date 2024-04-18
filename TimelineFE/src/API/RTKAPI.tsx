@@ -6,8 +6,9 @@ import { IUserResponse } from '../interfaces/IUserResponse'
 import { IBackendTimelinesDTO } from '../interfaces/IBackendTimelinesDTO'
 import ICreateTimelineDto from '../interfaces/ICreateTimelineDTO'
 import { IBackendResponse } from '../interfaces/IBackendResponse'
-import ICreateEventDto from '../interfaces/ICreateEventDto'
 import { IBackendEventDTO } from '../interfaces/IBackendEventDTO'
+import IEditEventDTO from '../interfaces/IEditEventDTO'
+import ICreateEventDTO from '../interfaces/ICreateEventDTO'
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({
@@ -56,7 +57,7 @@ export const api = createApi({
             }),
             invalidatesTags: ["Timelines"]
         }),
-        createEvent: builder.mutation<IBackendResponse, ICreateEventDto>({
+        createEvent: builder.mutation<IBackendResponse, ICreateEventDTO>({
             query: (dto) => ({
                 url: '/Event',
                 method: 'POST',
@@ -68,6 +69,14 @@ export const api = createApi({
             query: (id) => ({
                 url: `/Event/${id}`,
                 method: 'DELETE',
+            }),
+            invalidatesTags: ["Events"]
+        }),
+        editEvent: builder.mutation<IBackendResponse, { id: Number, editEventDTO: IEditEventDTO }>({
+            query: ({ id, editEventDTO }) => ({
+                url: `/Event/${id}`,
+                method: 'PUT',
+                body: editEventDTO,
             }),
             invalidatesTags: ["Events"]
         }),
@@ -85,5 +94,6 @@ export const { useRegisterMutation,
     useGetTimelineQuery,
     useGetAllTimelineEventsQuery,
     useCreateTimelineMutation,
-    useDeleteEventMutation
+    useDeleteEventMutation,
+    useEditEventMutation
 } = api

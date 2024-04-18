@@ -23,12 +23,12 @@ interface EventFormProps {
     submitHandler: SubmitHandler<EventSchemaValues>,
     success: boolean,
     action: string;
+    populatedValues?: EventSchemaValues;
 }
 
-export default function EventForm({ submitHandler, success, action }: EventFormProps) {
+export default function EventForm({ submitHandler, success, action, populatedValues }: EventFormProps) {
     const [startTime, setStartTime] = useState(false);
     const [endTime, setEndTime] = useState(false);
-
 
     const {
         control,
@@ -39,7 +39,7 @@ export default function EventForm({ submitHandler, success, action }: EventFormP
             mode: "onBlur",
             reValidateMode: "onBlur",
             resolver: zodResolver(EventSchema),
-            defaultValues: {
+            defaultValues: populatedValues ? populatedValues : {
                 name: "",
                 description: "",
                 dateStarted: new Date(),
@@ -51,7 +51,7 @@ export default function EventForm({ submitHandler, success, action }: EventFormP
 
     return (
         <form onSubmit={handleSubmit(submitHandler)} className="p-fluid">
-            <div className="field">
+            <div className="field p-2">
                 <span className="p-float-label">
                     <Controller
                         name="name"
@@ -68,7 +68,7 @@ export default function EventForm({ submitHandler, success, action }: EventFormP
             </div>
 
 
-            <div className="field">
+            <div className="field p-2">
                 <span className="p-float-label p-input-icon-right">
                     <Controller
                         name="description"
@@ -83,7 +83,7 @@ export default function EventForm({ submitHandler, success, action }: EventFormP
                 {errors.description && <small className="p-error">{errors.description.message}</small>}
             </div>
 
-            <div className="field">
+            <div className="field  p-2">
                 <span className="p-float-label flex">
                     <Controller
                         name="dateStarted"
@@ -97,13 +97,13 @@ export default function EventForm({ submitHandler, success, action }: EventFormP
                             />
                         )} />
                     <label htmlFor="dateStarted" className={classNames({ 'p-error': errors.dateStarted })}>Start Date</label>
-                    <ToggleButton className="w-[50%] p-1 m-2" onLabel="Remove Time" offLabel="Add Time" checked={startTime} onChange={(e: ToggleButtonChangeEvent) => setStartTime(e.value)}>Time</ToggleButton>
+                    <ToggleButton className="w-[50%] p-1" onLabel="Remove Time" offLabel="Add Time" checked={startTime} onChange={(e: ToggleButtonChangeEvent) => setStartTime(e.value)}>Time</ToggleButton>
 
                 </span>
                 {errors.dateStarted && <small className="p-error">{errors.dateStarted.message}</small>}
             </div>
 
-            <div className="field">
+            <div className="field p-2">
                 <span className="p-float-label flex">
                     <Controller name="dateFinished"
 
@@ -117,7 +117,7 @@ export default function EventForm({ submitHandler, success, action }: EventFormP
                             />
                         )} />
                     <label htmlFor="dateFinished" className={classNames({ 'p-error': errors.dateFinished })}>End Date</label>
-                    <ToggleButton className="w-[50%] p-1 m-2" onLabel="Remove Time" offLabel="Add Time" checked={endTime} onChange={(e: ToggleButtonChangeEvent) => setEndTime(e.value)}>Time</ToggleButton>
+                    <ToggleButton className="w-[50%] p-1 " onLabel="Remove Time" offLabel="Add Time" checked={endTime} onChange={(e: ToggleButtonChangeEvent) => setEndTime(e.value)}>Time</ToggleButton>
                 </span>
                 {errors.dateFinished && <small className="p-error">{errors.dateFinished.message}</small>}
             </div>

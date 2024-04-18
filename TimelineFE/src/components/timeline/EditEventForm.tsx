@@ -1,50 +1,64 @@
 import { SubmitHandler } from 'react-hook-form';
 import { Card } from 'primereact/card';
-import { useCreateEventMutation, } from '../../API/RTKAPI';
+import { useCreateEventMutation, useEditEventMutation, } from '../../API/RTKAPI';
 import { IBackendResponse } from '../../interfaces/IBackendResponse';
 import { useError } from '../../hooks/useError';
-import ICreateEventDto from '../../interfaces/ICreateEventDto';
-import { Panel } from 'primereact/panel';
 import EventForm, { EventSchemaValues } from './EventForm';
+import { faX } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button } from 'primereact/button';
+import IEvent from '../../interfaces/IEvent';
+import IEditEventDTO from '../../interfaces/IEditEventDTO';
 
 
 interface EditEventFormProps {
-    timelineId: Number | undefined
+    timelineId: Number | undefined,
+    editToggle: () => void,
+    event: IEvent
 }
 
-export default function EditEventForm({ timelineId }: EditEventFormProps) {
-    const [createEvent, { isSuccess }] = useCreateEventMutation();
+export default function EditEventForm({ timelineId, editToggle, event }: EditEventFormProps) {
+    const [editEvent, { isSuccess }] = useEditEventMutation();
     const { setApiError } = useError();
 
     const onSubmit: SubmitHandler<EventSchemaValues> = async (data) => {
-        const createEventDTO: ICreateEventDto = {
+        const editEventDTO: IEditEventDTO = {
             name: data.name,
             description: data.description,
-            dateCreated: new Date(),
             dateStarted: data.dateStarted,
             dateFinished: data.dateFinished,
-            TTimelineId: timelineId
         }
 
         try {
-            await createEvent(createEventDTO).unwrap()
+            const id = event.id as Number;
+            await editEvent({ id, editEventDTO }).unwrap()
+            editToggle();
         } catch (error: unknown) {
             setApiError(error as IBackendResponse);
         }
     };
 
+    const populatedValues = {
+        name: event.name as string,
+        description: event.description ? event.description as string : "",
+        dateStarted: event.dateStarted ? new Date(event.dateStarted as Date) : new Date(),
+        dateFinished: event.dateCreated ? new Date(event.dateCreated as Date) : new Date(),
+    }
+
 
     return (
-        <Panel toggleable collapsed header="Add Event">
-            <Card className="bg-cyan-600" title="Create Event">
-                <div className="registration-form">
-                    <div className="flex justify-content-center">
-                        <div className="card mt-2 mb-1.5 ">
-                            <EventForm submitHandler={onSubmit} success={isSuccess} action="Edit" />
-                        </div>
-                    </div>
+        <Card className="bg-cyan-600">
+            <div className="flex justify-content-center">
+                <div className="card">
+                    <EventForm submitHandler={onSubmit} success={isSuccess} action="Edit" populatedValues={populatedValues} />
+                    <Button
+                        onClick={editToggle}
+                        label="Cancel Edit "
+                        className=" bg-red-600 p-1 mt-2 w-[100%]" >
+                        <FontAwesomeIcon className="p-1" icon={faX} />
+                    </Button>
                 </div>
-            </Card >
-        </Panel>
+            </div>
+        </Card >
     );
 }

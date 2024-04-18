@@ -4,7 +4,7 @@ import { Card } from 'primereact/card';
 import { useCreateEventMutation, } from '../../API/RTKAPI';
 import { IBackendResponse } from '../../interfaces/IBackendResponse';
 import { useError } from '../../hooks/useError';
-import ICreateEventDto from '../../interfaces/ICreateEventDto';
+import ICreateEventDTO from '../../interfaces/ICreateEventDTO';
 import { Panel } from 'primereact/panel';
 import EventForm, { EventSchemaValues } from './EventForm';
 import { useRef } from 'react';
@@ -19,7 +19,7 @@ export default function CreateEventForm({ timelineId }: CreateEventFormProps) {
     const menu = useRef<Panel>(null);
 
     const onSubmit: SubmitHandler<EventSchemaValues> = async (data) => {
-        const createEventDTO: ICreateEventDto = {
+        const createEventDTO: ICreateEventDTO = {
             name: data.name,
             description: data.description,
             dateCreated: new Date(),
