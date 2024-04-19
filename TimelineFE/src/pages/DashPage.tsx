@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ITimeline from '../interfaces/ITimeline';
 import { useGetAllUserTimelinesQuery } from '../API/RTKAPI';
-import { faTimeline } from "@fortawesome/free-solid-svg-icons"
+import { faTimeline, faPencil } from "@fortawesome/free-solid-svg-icons"
 import { Link } from "react-router-dom";
 import { Toast } from 'primereact/toast';
 
@@ -30,7 +30,10 @@ export default function DashPage() {
     interface ButtonLinkProps {
         timelineId: Number | undefined;
     }
-    const ButtonLink: React.FC<ButtonLinkProps> = ({ timelineId }) => { return <Link to={`/timelines/${timelineId}`} className="btn" ><FontAwesomeIcon icon={faTimeline} /> Select</Link> };
+    const SelectButton: React.FC<ButtonLinkProps> = ({ timelineId }) => { return <Link to={`/timelines/${timelineId}`} className="btn" ><FontAwesomeIcon icon={faTimeline} /> Select</Link> };
+
+    const EditButton: React.FC<ButtonLinkProps> = ({ timelineId }) => { return <Link to={`/timelines/modify/${timelineId}`} className="btn" ><FontAwesomeIcon icon={faPencil} /> Edit</Link> };
+
 
     const listItem = (timeline: ITimeline, index: number) => {
         return (
@@ -49,7 +52,8 @@ export default function DashPage() {
                             </div> */}
                         </div>
                         <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-                            <ButtonLink timelineId={timeline.id} />
+                            <SelectButton timelineId={timeline.id} />
+                            <EditButton timelineId={timeline.id} />
                         </div>
                     </div>
                 </div>
@@ -73,14 +77,15 @@ export default function DashPage() {
                         <div className="text-2xl font-bold">{timeline.name}</div>
                     </div>
                     <div className="flex align-items-center justify-content-between">
-                        <ButtonLink timelineId={timeline.id} />
+                        <SelectButton timelineId={timeline.id} />
+                        <EditButton timelineId={timeline.id} />
                     </div>
                 </div>
             </div >
         );
     };
 
-    const itemTemplate = (item: ITimeline, layout: "grid" | "list" | (string & Record<string, unknown>) | undefined, index: number) => {
+    const itemTemplate = (item: ITimeline, layout: "grid" | "list" | (string & Record<string, unknown>) | undefined, index: number): React.ReactNode => {
         if (!item) {
             return null;
         }
@@ -88,8 +93,8 @@ export default function DashPage() {
         else if (layout === 'grid') return gridItem(item);
     };
 
-    const listTemplate = (timelines: ITimeline[], layout?: 'list' | 'grid' | (string & Record<string, unknown>)) => {
-        return <div className="grid grid-nogutter">{timelines.map((timeline, index) => itemTemplate(timeline, layout, index))}</div>;
+    const listTemplate = (timelines: ITimeline[], layout?: 'list' | 'grid' | (string & Record<string, unknown>)): React.ReactNode[] => {
+        return timelines.map((timeline, index) => itemTemplate(timeline, layout, index));
     };
 
     const header = () => {

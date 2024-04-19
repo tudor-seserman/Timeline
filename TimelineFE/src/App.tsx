@@ -8,6 +8,7 @@ import RegistrationPage from './pages/RegistrationPage';
 import DashPage from './pages/DashPage';
 import CreateTimelinePage from './pages/CreateTimelinePage';
 import TimelinePage from './pages/TimelinePage';
+import ModifyTimelinePage from './pages/ModifyTimelinePage';
 
 
 
@@ -26,6 +27,7 @@ function App() {
         <Route path="/timelines/*" element={
           <Routes>
             <Route path="create" element={<CreateTimelinePage />}></Route>
+            <Route path="modify/:timelineId" element={<ModifyTimelinePage />}></Route>
             <Route path="/:timelineId" element={<TimelinePage />}></Route>
           </Routes>}
         ></Route>
