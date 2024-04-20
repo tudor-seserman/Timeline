@@ -1,5 +1,5 @@
 import { Card } from 'primereact/card';
-import { useCreateTimelineMutation } from '../../API/RTKAPI';
+import { useEditTimelineMutation } from '../../API/RTKAPI';
 import { IBackendResponse } from '../../interfaces/IBackendResponse';
 import { useError } from '../../hooks/useError';
 import TimeLineForm, { TimelineSchemaValues } from './TimelineForm';
@@ -7,12 +7,12 @@ import ITimeline from '../../interfaces/ITimeline';
 import { SubmitHandler } from 'react-hook-form';
 import IEditTimelineDTO from '../../interfaces/IEditTimelineDTO';
 
-interface EditTimeLineFormProps {
+interface EditTimelineFormProps {
     timeline: ITimeline
 }
 
-export default function EditTimeLineForm({ timeline }: EditTimeLineFormProps) {
-    const [createTimeline, { isSuccess }] = useCreateTimelineMutation();
+export default function EditTimelineForm({ timeline }: EditTimelineFormProps) {
+    const [editTimeline, { isSuccess }] = useEditTimelineMutation();
     const { setApiError } = useError();
 
     const populatedValues = {
@@ -23,15 +23,16 @@ export default function EditTimeLineForm({ timeline }: EditTimeLineFormProps) {
     }
 
     const onSubmit: SubmitHandler<TimelineSchemaValues> = async (data) => {
-        const createTimelineDTO: IEditTimelineDTO = {
-            id: timeline.id as Number,
+        const id = timeline.id as Number;
+        const editTimelineDTO: IEditTimelineDTO = {
+            id: id,
             name: data.name,
             description: data.description,
             dateStarted: data.dateStarted,
             dateFinished: data.dateFinished,
         }
         try {
-            await createTimeline(createTimelineDTO).unwrap()
+            await editTimeline({ id, editTimelineDTO }).unwrap()
         } catch (error: unknown) {
             setApiError(error as IBackendResponse);
         }
@@ -41,14 +42,12 @@ export default function EditTimeLineForm({ timeline }: EditTimeLineFormProps) {
 
 
     return (
-        <Card className="bg-cyan-600" title="Create Timeline">
-            <div className="registration-form">
-                <div className="flex justify-content-center">
-                    <div className="card mt-2 mb-1.5 ">
-                        <TimeLineForm submitHandler={onSubmit} success={isSuccess} action="Edit" populatedValues={populatedValues} />
-                    </div>
+        <div className="registration-form">
+            <div className="flex justify-content-center">
+                <div className="card mt-2 mb-1.5 ">
+                    <TimeLineForm submitHandler={onSubmit} success={isSuccess} action="Edit" populatedValues={populatedValues} />
                 </div>
             </div>
-        </Card >
+        </div>
     );
 }

@@ -85,7 +85,7 @@ export default function DashPage() {
         );
     };
 
-    const itemTemplate = (item: ITimeline, layout: "grid" | "list" | (string & Record<string, unknown>) | undefined, index: number): React.ReactNode => {
+    const itemTemplate = (item: ITimeline, layout: "grid" | "list" | (string & Record<string, unknown>) | undefined, index: number) => {
         if (!item) {
             return null;
         }
@@ -93,8 +93,8 @@ export default function DashPage() {
         else if (layout === 'grid') return gridItem(item);
     };
 
-    const listTemplate = (timelines: ITimeline[], layout?: 'list' | 'grid' | (string & Record<string, unknown>)): React.ReactNode[] => {
-        return timelines.map((timeline, index) => itemTemplate(timeline, layout, index));
+    const listTemplate = (timelines: ITimeline[], layout?: 'list' | 'grid' | (string & Record<string, unknown>)): React.ReactNode => {
+        return <div className="grid grid-nogutter">{timelines.map((timeline, index) => itemTemplate(timeline, layout, index))}</div>;
     };
 
     const header = () => {

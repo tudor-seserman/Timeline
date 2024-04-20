@@ -9,6 +9,7 @@ import { IBackendResponse } from '../interfaces/IBackendResponse'
 import { IBackendEventDTO } from '../interfaces/IBackendEventDTO'
 import IEditEventDTO from '../interfaces/IEditEventDTO'
 import ICreateEventDTO from '../interfaces/ICreateEventDTO'
+import IEditTimelineDTO from '../interfaces/IEditTimelineDTO'
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({
@@ -42,10 +43,6 @@ export const api = createApi({
             query: () => '/Timeline',
             providesTags: ["Timelines"],
         }),
-        getAllTimelineEvents: builder.query<IBackendEventDTO[], Number>({
-            query: (timelineId) => `/Timeline/Events/${timelineId}`,
-            providesTags: ["Events"],
-        }),
         getTimeline: builder.query<IBackendTimelinesDTO, string>({
             query: (timeLineId) => `/Timeline/${timeLineId}`,
         }),
@@ -56,6 +53,25 @@ export const api = createApi({
                 body: dto,
             }),
             invalidatesTags: ["Timelines"]
+        }),
+        deleteTimeline: builder.mutation<IBackendResponse, Number>({
+            query: (id) => ({
+                url: `/Timeline/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ["Events", "Timelines"]
+        }),
+        editTimeline: builder.mutation<IBackendResponse, { id: Number, editTimelineDTO: IEditTimelineDTO }>({
+            query: ({ id, editTimelineDTO }) => ({
+                url: `/Timeline/${id}`,
+                method: 'PUT',
+                body: editTimelineDTO,
+            }),
+            invalidatesTags: ["Events", "Timelines"]
+        }),
+        getAllTimelineEvents: builder.query<IBackendEventDTO[], Number>({
+            query: (timelineId) => `/Timeline/Events/${timelineId}`,
+            providesTags: ["Events"],
         }),
         createEvent: builder.mutation<IBackendResponse, ICreateEventDTO>({
             query: (dto) => ({
@@ -90,10 +106,12 @@ export const { useRegisterMutation,
     useLoginMutation,
     useProtectedMutation,
     useGetAllUserTimelinesQuery,
-    useCreateEventMutation,
     useGetTimelineQuery,
-    useGetAllTimelineEventsQuery,
     useCreateTimelineMutation,
+    useEditTimelineMutation,
+    useDeleteTimelineMutation,
+    useGetAllTimelineEventsQuery,
+    useCreateEventMutation,
+    useEditEventMutation,
     useDeleteEventMutation,
-    useEditEventMutation
 } = api
