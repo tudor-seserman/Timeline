@@ -31,6 +31,7 @@ export const api = createApi({
                 method: 'POST',
                 body: credentials,
             }),
+            invalidatesTags: ["Timelines", "Events"]
         }),
         register: builder.mutation<IUserResponse, IRegistrationDTO>({
             query: (credentials) => ({
@@ -38,6 +39,7 @@ export const api = createApi({
                 method: 'POST',
                 body: credentials,
             }),
+            invalidatesTags: ["Timelines", "Events"]
         }),
         getAllUserTimelines: builder.query<IBackendTimelinesDTO[], void>({
             query: () => '/Timeline',

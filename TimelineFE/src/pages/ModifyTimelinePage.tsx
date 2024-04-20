@@ -21,7 +21,7 @@ export default function ModifyTimelinePage() {
     return (
         <div>
             {timeline != undefined &&
-                <Card title="Edit Timeline" className="bg-cyan-600">
+                <Card title={`Edit ${timeline.name}`} className="bg-cyan-600">
                     <EditTimelineForm timeline={timeline} />
                     <DeleteTimeline timeline={timeline} />
                 </Card>}

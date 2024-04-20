@@ -1,4 +1,3 @@
-import { Card } from 'primereact/card';
 import { useEditTimelineMutation } from '../../API/RTKAPI';
 import { IBackendResponse } from '../../interfaces/IBackendResponse';
 import { useError } from '../../hooks/useError';
@@ -6,6 +5,8 @@ import TimeLineForm, { TimelineSchemaValues } from './TimelineForm';
 import ITimeline from '../../interfaces/ITimeline';
 import { SubmitHandler } from 'react-hook-form';
 import IEditTimelineDTO from '../../interfaces/IEditTimelineDTO';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 interface EditTimelineFormProps {
     timeline: ITimeline
@@ -14,6 +15,7 @@ interface EditTimelineFormProps {
 export default function EditTimelineForm({ timeline }: EditTimelineFormProps) {
     const [editTimeline, { isSuccess }] = useEditTimelineMutation();
     const { setApiError } = useError();
+    const navigate = useNavigate();
 
     const populatedValues = {
         name: timeline.name as string,
@@ -32,14 +34,15 @@ export default function EditTimelineForm({ timeline }: EditTimelineFormProps) {
             dateFinished: data.dateFinished,
         }
         try {
-            await editTimeline({ id, editTimelineDTO }).unwrap()
+            await editTimeline({ id, editTimelineDTO }).unwrap();
         } catch (error: unknown) {
             setApiError(error as IBackendResponse);
         }
     };
 
-
-
+    useEffect(() => {
+        if (isSuccess) { navigate('/dash') }
+    }, [isSuccess])
 
     return (
         <div className="registration-form">

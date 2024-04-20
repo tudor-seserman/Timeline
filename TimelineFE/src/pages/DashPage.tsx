@@ -6,16 +6,22 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ITimeline from '../interfaces/ITimeline';
 import { useGetAllUserTimelinesQuery } from '../API/RTKAPI';
-import { faTimeline, faPencil } from "@fortawesome/free-solid-svg-icons"
+import { faTimeline, faPencil, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { Link } from "react-router-dom";
 import { Toast } from 'primereact/toast';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { InputText } from 'primereact/inputtext';
+import { FloatLabel } from "primereact/floatlabel";
+
 
 export default function DashPage() {
     const navigate = useNavigate();
     let location = useLocation();
-    const { data: timelines = [] } = useGetAllUserTimelinesQuery();
+    const { isLoading, data } = useGetAllUserTimelinesQuery();
     const [layout, setLayout] = useState<"grid" | "list" | (string & Record<string, unknown>) | undefined>('grid');
     const toast = useRef<Toast>(null);
+    const [search, setSearch] = useState<string>("")
+
 
     const show = (detailParm: string,) => {
         toast.current?.show({ severity: "error", summary: 'Info', detail: detailParm });
@@ -100,16 +106,23 @@ export default function DashPage() {
     const header = () => {
         return (
             <div className="flex justify-between">
-                <Button label="Create Timeline" onClick={() => navigate("/timelines/create")} />
+                <Button label="Create New Timeline" onClick={() => navigate("/timelines/create")}> <FontAwesomeIcon icon={faPlus} /></Button>
+                {/* <FloatLabel> */}
+                <InputText id="search" value={search} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)} />
+                {/* <label for="search">Search</label>
+                        </FloatLabel> */}
                 <DataViewLayoutOptions layout={layout} onChange={(e) => setLayout(e.value)} />
             </div>
         );
     };
 
+    let timelines = data?.filter(timeline => { return timeline.name.toLowerCase().includes(search.toLowerCase()) || timeline.description?.toLowerCase().includes(search.toLowerCase()) })
+
     return (
         <div className="card">
             <Toast ref={toast} position="center" />
-            <DataView value={timelines} listTemplate={listTemplate} layout={layout as "grid" | "list" | (string & Record<string, unknown>) | undefined} header={header()} />
+            {!isLoading && <DataView value={timelines} listTemplate={listTemplate} layout={layout as "grid" | "list" | (string & Record<string, unknown>) | undefined} header={header()} />}
+            {isLoading && <ProgressSpinner />}
         </div>
     )
 }
