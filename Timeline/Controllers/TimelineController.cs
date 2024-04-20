@@ -78,19 +78,19 @@ namespace Timeline.Controllers
 
         // PUT: api/Timeline/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTTimeline(int id, TTimeline tTimeline)
+        public async Task<IActionResult> PutTTimeline(int id, EditTimelineDTO editTimelineDto)
         {
-            if (id != tTimeline.Id)
+            if (id != editTimelineDto.Id)
             {
                 return BadRequest();
             }
-
-            _context.Entry(tTimeline).State = EntityState.Modified;
-
+            
             try
             {
-                await _context.SaveChangesAsync();
+                var updateAsync = await _timelineRepository.UpdateAsync(id, editTimelineDto);
+                return Ok(updateAsync);;
             }
             catch (DbUpdateConcurrencyException)
             {

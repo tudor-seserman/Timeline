@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Timeline.Helpers.DTOs.Timeline;
 using Timeline.Interfaces.Data;
 using Timeline.Models;
 
@@ -73,8 +74,23 @@ public class TimelineRepository : ITimelineRepository
         return timeline;
     }
 
-    // public Task<TTimeline> DeleteTTimeline(TTimeline timeline)
-    // {
-    //     throw new NotImplementedException();
-    // }
+    public async Task<TTimeline?> UpdateAsync(int id, EditTimelineDTO editTimelineDto)
+    {
+        var tTimeline = await _context.TTimelines.FindAsync(id);
+
+        if (tTimeline == null)
+        {
+            return null;
+            
+        }
+
+        tTimeline.Name = editTimelineDto.Name;
+        tTimeline.Description = editTimelineDto.Description;
+        tTimeline.DateStarted = editTimelineDto.DateStarted;
+        tTimeline.DateFinished = editTimelineDto.DateFinished;
+        
+        await _context.SaveChangesAsync();
+        
+        return tTimeline;
+    }
 }
