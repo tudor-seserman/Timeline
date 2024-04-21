@@ -69,7 +69,7 @@ export const Login = () => {
 
 
     return (
-        <Card className="bg-cyan-600" title="Login">
+        <Card title="Login" className="shadow-none">
             <div className="registration-form">
                 <div className="flex justify-content-center">
                     <div className="card mt-2 mb-1.5">
@@ -105,7 +105,7 @@ export const Login = () => {
                                                 feedback={false}
                                             />
                                         )} />
-                                    <label htmlFor="password" className={classNames({ 'p-error': errors.password })}>Password*</label>
+                                    <label htmlFor="password" className={classNames({ 'p-error': errors.password })}> Password*</label>
                                 </span>
                                 {errors.password && <small className="p-error">{errors.password.message}</small>}
                             </div>

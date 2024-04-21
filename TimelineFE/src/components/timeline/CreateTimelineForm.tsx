@@ -32,11 +32,11 @@ export default function CreateTimeLineForm() {
 
 
     return (
-        <Card className="bg-cyan-600" title="Create Timeline">
+        <Card className="bg-Blu" title="Create Timeline">
             <div className="registration-form">
                 <div className="flex justify-content-center">
                     <div className="card mt-2 mb-1.5 ">
-                        <TimeLineForm submitHandler={onSubmit} success={isSuccess} action="Create" />
+                        <TimeLineForm submitHandler={onSubmit} success={isSuccess} action="Create Timeline" />
                     </div>
                 </div>
             </div>

@@ -95,7 +95,7 @@ export const Register = () => {
     );
 
     return (
-        <Card className="bg-cyan-600" title="Register">
+        <Card title="Register" className="shadow-none">
             <div className="registration-form">
                 <div className="flex justify-content-center">
                     <div className="card mt-2 mb-1.5 ">
@@ -119,8 +119,7 @@ export const Register = () => {
 
 
                             <div className="field">
-                                <span className="p-float-label p-input-icon-right">
-                                    <i className="pi pi-envelope" />
+                                <span className="p-float-label">
                                     <Controller name="email"
                                         control={control}
                                         render={({ field }) => (

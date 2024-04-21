@@ -48,7 +48,7 @@ export default function EventOverlay({ event, setEvent, toggle }: EventOverlayPr
     return (
         <>
             <Toast ref={toast} />
-            <ConfirmPopup className="bg-yellow-200 text-gray-700 border-0 rounded-md shadow-lg z-40 mt-3 p-1" pt={{ footer: { style: { display: "flex", justifyContent: "space-between", } } }} />
+            <ConfirmPopup className="bg-Highlight text-gray-700 border-0 rounded-md shadow-lg z-40 mt-3 p-1" pt={{ footer: { style: { display: "flex", justifyContent: "space-between", } } }} />
             <Card title={event.name} subTitle={event.description} hidden={editMode}>
                 <p className="m-0">
                     Finish Date: {new Date(event?.dateFinished as Date).toLocaleString()} <br />
@@ -62,7 +62,7 @@ export default function EventOverlay({ event, setEvent, toggle }: EventOverlayPr
                         size="large"
                         severity="info"
                         label="Edit"
-                        className=" bg-yellow-300 p-1" >
+                        className=" p-1" >
                         <FontAwesomeIcon className="p-1" icon={faPencil} />
                     </Button>
                     <Button
@@ -71,7 +71,7 @@ export default function EventOverlay({ event, setEvent, toggle }: EventOverlayPr
                         size="large"
                         severity="danger"
                         label="Delete"
-                        className=" bg-red-600 p-1" >
+                        className=" !bg-OJ p-1" >
                         <FontAwesomeIcon className="p-1" icon={faX} />
                     </Button>
                 </div>

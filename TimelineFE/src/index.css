@@ -1,17 +1,179 @@
+/* Futura PT Book */
+@font-face {
+  font-family: "FuturaPT";
+  src: url("src/assets/Futura/FuturaPTBook.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Futura PT Book Oblique */
+@font-face {
+  font-family: "FuturaPT";
+  src: url("src/assets/Futura/FuturaPTBookOblique.otf") format("opentype");
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* Futura PT Medium */
+@font-face {
+  font-family: "FuturaPT";
+  src: url("src/assets/Futura/FuturaPTMedium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* Futura PT Medium Oblique */
+@font-face {
+  font-family: "FuturaPT";
+  src: url("src/assets/Futura/FuturaPTMediumOblique.otf") format("opentype");
+  font-weight: 500;
+  font-style: italic;
+}
+
+/* Futura PT Bold */
+@font-face {
+  font-family: "FuturaPT";
+  src: url("src/assets/Futura/FuturaPTBold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* Futura PT Bold Oblique */
+@font-face {
+  font-family: "FuturaPT";
+  src: url("src/assets/Futura/FuturaPTBoldOblique.otf") format("opentype");
+  font-weight: bold;
+  font-style: italic;
+}
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: FuturaPT, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
+  border-color: #ff4500;
   background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  column-gap: 20px;
+  -webkit-column-gap: 20px;
+  -moz-column-gap: 20px;
+
+  -surface-ground: #87ceeb;
+  --surface-section: #87ceeb;
+  --surface-0: #87ceeb;
+  --surface-a: #87ceeb;
+  --surface-overlay: #87ceeb;
+  --surface-card: #87ceeb;
+  --highlight-bg: #ff7f50;
+  --highlight-text-color: black;
+  --text-color: #3f3f46;
+  --text-color-secondary: #dfdfe3;
+  --primary-color: #ff4500;
+  --primary-color-text: #ff7f50;
+  --highlight-text-color: #008080;
+  --focus-ring: #008080;
 }
+
+.p-component {
+  font-family: FuturaPT;
+}
+.p-inputtext {
+  background: #ff7f50;
+  border: 1px solid #008080;
+}
+.p-password input {
+  padding-right: 2.5rem;
+}
+
+.p-password .p-password-show-icon,
+.p-password .p-password-hide-icon {
+  right: 0;
+}
+
+.p-input-icon-right {
+  padding-right: 1.5rem;
+}
+
+.p-card {
+  background-color: #87ceeb;
+  border-color: #87ceeb;
+}
+
+.p-component .p-card {
+  background-color: #87ceeb;
+  border-color: #87ceeb;
+}
+
+.p-dataview .p-dataview-content {
+  background-color: #ff4500;
+}
+
+.p-menubar .p-menubar-root-list .p-menuitem .p-menuitem-content {
+  background-color: #008080;
+}
+
+.p-menubar .p-menubar-root-list .p-menuitem .p-menuitem-content:hover {
+  background-color: #87ceeb;
+}
+
+@layer primereact {
+  @media screen and (max-width: 960px) {
+    .p-menubar .p-menubar-root-list {
+      background-color: #008080; /* Override background color */
+    }
+  }
+}
+
+/* .p-togglebutton-input {
+  background: #ff4500;
+  border: 1px solid #ff4500;
+  opacity: 0;
+  color: Black;
+} */
+
+.p-togglebutton .p-button {
+  background: #ff4500;
+  border-color: #ff7f50;
+}
+
+.p-togglebutton.p-highlight .p-button {
+  background: #ff7f50;
+  border-color: #ff4500;
+}
+
+.p-panel .p-panel-header {
+  background-color: #008080;
+}
+
+.p-panel .p-panel-content {
+  background-color: #87ceeb;
+
+  .p-datepicker .p-datepicker-header .p-datepicker-title {
+    display: flexbox;
+  }
+}
+
+.p-datepicker:not(.p-datepicker-inline) {
+  background-color: #ff7f50;
+}
+.p-datepicker:not(.p-datepicker-inline) .p-datepicker-header {
+  background-color: #ff7f50;
+}
+
+.p-timeline .p-timeline-event-marker {
+  background-color: #ffd700;
+}
+
+.p-timeline .p-timeline-event-connector {
+  background-color: #ffd700;
+}
+
 /* 
 a {
   font-weight: 500;
@@ -67,6 +229,18 @@ button:focus-visible {
   }
 }
 */
+
+button {
+  background-color: #ffd700;
+  border: 1px solid #008080;
+  color: black;
+  padding: 1%;
+}
+
+.card {
+  background-color: #87ceeb;
+  color: black;
+}
 
 .registration-form .card {
   min-width: 450px;

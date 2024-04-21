@@ -5,6 +5,7 @@ import { ApiErrors } from '../errors/ApiErrors';
 import { logout } from '../../redux/authSlice';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../hooks/useRedux';
+import { classNames } from 'primereact/utils';
 
 
 export const NavBar = () => {
@@ -45,11 +46,14 @@ export const NavBar = () => {
         },
     ];
 
+
+
+
     return (
         <>
-            <div className="flex items-center bg-yellow-700">
+            <div className=' bg-Teal '>
                 <Menubar
-                    className=" bg-orange-600 text-black flex"
+                    className=" bg-Teal text-white border-Teal text-xl font-bold"
                     start="Timelines"
                     model={items} />
             </div>

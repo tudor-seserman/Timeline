@@ -46,7 +46,7 @@ export default function DeleteTimeline({ timeline }: DeleteTimelineProps) {
     return (
         <>
             <Toast ref={toast} />
-            <ConfirmPopup className="bg-yellow-200 text-gray-700 border-0 rounded-md shadow-lg z-40 mt-3 p-1" pt={{ footer: { style: { display: "flex", justifyContent: "space-between", } } }} />
+            <ConfirmPopup className="bg-Highlight text-gray-700 border-0 rounded-md shadow-lg z-40 mt-3 p-1" pt={{ footer: { style: { display: "flex", justifyContent: "space-between", } } }} />
 
             <Button
                 loading={isLoading}
@@ -55,7 +55,7 @@ export default function DeleteTimeline({ timeline }: DeleteTimelineProps) {
                 size="large"
                 severity="danger"
                 label={`Delete ${timeline.name}`}
-                className=" bg-red-600 p-1" >
+                className="!bg-OJ p-1" >
                 <FontAwesomeIcon className="p-1" icon={faX} />
             </Button>
 

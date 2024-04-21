@@ -48,7 +48,7 @@ export default function EditTimelineForm({ timeline }: EditTimelineFormProps) {
         <div className="registration-form">
             <div className="flex justify-content-center">
                 <div className="card mt-2 mb-1.5 ">
-                    <TimeLineForm submitHandler={onSubmit} success={isSuccess} action="Edit" populatedValues={populatedValues} />
+                    <TimeLineForm submitHandler={onSubmit} success={isSuccess} action="Save Edit" populatedValues={populatedValues} />
                 </div>
             </div>
         </div>

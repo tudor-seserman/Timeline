@@ -26,11 +26,6 @@ export default function TimelineEvents({ timelineId }: TimelineEventsProps) {
 
     const opRef = useRef<OverlayPanel | null>(null);
 
-    // useEffect(() => {
-    //     if (isSuccess && opRef.current) {
-    //         ;
-    //     }
-    // }, [isSuccess])
 
     const toggle = () => { if (opRef.current) { opRef.current.toggle(null) } };
 
@@ -46,7 +41,11 @@ export default function TimelineEvents({ timelineId }: TimelineEventsProps) {
 
         return (
             <div>
-                <Card title={item.name} subTitle={item.description} onClick={(e) => handleCardClick(e, item)}>
+                <Card title={item.name}
+                    subTitle={item.description}
+                    onClick={(e) => handleCardClick(e, item)}
+                    className="!bg-Cora"
+                >
                 </Card>
             </div>
         );
@@ -55,7 +54,7 @@ export default function TimelineEvents({ timelineId }: TimelineEventsProps) {
     return (<>
         {isSuccess && <div className="card">
             <Timeline value={data} align="alternate" className="customized-timeline" content={customizedContent} />
-            <OverlayPanel ref={opRef}>
+            <OverlayPanel className="bg-OJ" ref={opRef}>
                 {event && <EventOverlay event={event} setEvent={setEvent} toggle={toggle} />}
             </OverlayPanel>
         </div>}

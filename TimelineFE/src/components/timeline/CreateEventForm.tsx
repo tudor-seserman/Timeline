@@ -38,7 +38,7 @@ export default function CreateEventForm({ timelineId }: CreateEventFormProps) {
 
     return (
         <Panel toggleable collapsed ref={menu} header="Add Event">
-            <Card className="bg-cyan-600" title="Create Event">
+            <Card className="bg-Blu" title="Create Event">
                 <div className="registration-form">
                     <div className="flex justify-content-center">
                         <div className="card mt-2 mb-1.5 ">

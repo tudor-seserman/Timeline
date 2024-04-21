@@ -123,7 +123,7 @@ export default function TimeLineForm({ submitHandler, success, action, populated
                 </span>
                 {errors.dateFinished && <small className="p-error">{errors.dateFinished.message}</small>}
             </div>
-            <Button loading={isSubmitting} className="bg-amber-400 mt-2" type="submit" label={isSubmitting ? "Sending..." : `${action} Timeline`} />
+            <Button loading={isSubmitting} className="bg-amber-400 mt-2" type="submit" label={isSubmitting ? "Sending..." : `${action}`} />
 
         </form>
 

@@ -49,14 +49,14 @@ export default function EditEventForm({ editToggle, event, toggle }: EditEventFo
 
 
     return (
-        <Card className="bg-cyan-600">
+        <Card >
             <div className="flex justify-content-center">
                 <div className="card">
                     <EventForm submitHandler={onSubmit} success={isSuccess} action="Edit" populatedValues={populatedValues} />
                     <Button
                         onClick={editToggle}
                         label="Cancel Edit "
-                        className=" bg-red-600 p-1 mt-2 w-[100%]" >
+                        className="!bg-OJ p-1 mt-2 w-[100%]" >
                         <FontAwesomeIcon className="p-1" icon={faX} />
                     </Button>
                 </div>
