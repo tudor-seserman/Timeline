@@ -10,6 +10,7 @@ import { IBackendEventDTO } from '../interfaces/IBackendEventDTO'
 import IEditEventDTO from '../interfaces/IEditEventDTO'
 import ICreateEventDTO from '../interfaces/ICreateEventDTO'
 import IEditTimelineDTO from '../interfaces/IEditTimelineDTO'
+import IBackendConnectionsDTO from '../interfaces/IBackendConnectionsDTO'
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({
@@ -23,7 +24,7 @@ export const api = createApi({
             return headers
         },
     }),
-    tagTypes: ["Timelines", "Events"],
+    tagTypes: ["Timelines", "Events", "Connections"],
     endpoints: (builder) => ({
         login: builder.mutation<IUserResponse, ILoginDTO>({
             query: (credentials) => ({
@@ -39,7 +40,7 @@ export const api = createApi({
                 method: 'POST',
                 body: credentials,
             }),
-            invalidatesTags: ["Timelines", "Events"]
+            invalidatesTags: ["Timelines", "Events",]
         }),
         getAllUserTimelines: builder.query<IBackendTimelinesDTO[], void>({
             query: () => '/Timeline',
@@ -97,6 +98,24 @@ export const api = createApi({
                 body: editEventDTO,
             }),
             invalidatesTags: ["Events"]
+        }),
+        getAllUserConnections: builder.query<IBackendConnectionsDTO[], void>({
+            query: () => '/Account/Connections',
+            providesTags: ["Connections"],
+        }), createConnection: builder.mutation<IBackendResponse, string>({
+            query: (dto) => ({
+                url: '/Account/Connections',
+                method: 'POST',
+                body: dto,
+            }),
+            invalidatesTags: ["Connections"]
+        }),
+        deleteConnection: builder.mutation<IBackendResponse, string>({
+            query: (string) => ({
+                url: `/Account/Connections/${string}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ["Connections"]
         }),
         protected: builder.mutation<{ message: string }, void>({
             query: () => 'protected',

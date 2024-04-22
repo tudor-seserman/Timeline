@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,9 @@ using Timeline.Interfaces;
 using Timeline.Models;
 using Timeline.Data;
 using Microsoft.EntityFrameworkCore;
+using Timeline.Helpers.DTOs.Connections;
+using Timeline.Helpers.Extensions;
+using Timeline.Helpers.Mappers;
 
 namespace Timeline.Controllers
 {
@@ -17,12 +21,14 @@ namespace Timeline.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly DbContext _context;
         
-        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager)
+        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager,DbContext context)
         {
             _userManager = userManager;
             _tokenService = tokenService;
             _signInManager = signInManager;
+            _context = context;
         }
 
         [HttpPost("login")]
@@ -89,6 +95,44 @@ namespace Timeline.Controllers
             catch (Exception e)
             {
                 return StatusCode(500, e);
+            }
+        }
+        
+        [Authorize]
+        [HttpGet("Connections")]
+        public async Task<ActionResult<List<ConnectionDTO>>> GetConnections()
+        {
+            var username = User.GetUsername();
+            var appUser = await _userManager.FindByNameAsync(username);
+        
+            return appUser.toConnectionListFromUser();
+        }
+        
+        [Authorize]
+        [HttpPost("Connections")]
+        public async Task<ActionResult<AppUser>> AddConnection([FromBody]string newConnection)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var username = User.GetUsername();
+            
+            if (username == newConnection)
+                return BadRequest("You should aready be in touch with yourself!");
+            
+            var appUser = await _userManager.FindByNameAsync(username);
+
+            try
+            {
+                var newConnectionUser = await _userManager.FindByNameAsync(newConnection);
+                appUser.Friends.Add(newConnectionUser);
+                await _userManager.UpdateAsync(appUser);
+
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, "User not found.");
             }
         }
     }

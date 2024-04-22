@@ -27,6 +27,12 @@ export const NavBar = () => {
             command: () => { navigate('/dash') },
         },
         {
+            id: 'nav3',
+            label: 'Connections',
+            visible: loggedInUser != null,
+            command: () => { navigate('/connections') },
+        },
+        {
             id: 'nav4',
             label: 'Login',
             visible: loggedInUser == null,
