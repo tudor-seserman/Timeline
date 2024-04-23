@@ -8,9 +8,11 @@ using Timeline.Interfaces;
 using Timeline.Models;
 using Timeline.Data;
 using Microsoft.EntityFrameworkCore;
+using Timeline.Data.Repositories;
 using Timeline.Helpers.DTOs.Connections;
 using Timeline.Helpers.Extensions;
 using Timeline.Helpers.Mappers;
+using Timeline.Interfaces.Data;
 
 namespace Timeline.Controllers
 {
@@ -21,13 +23,15 @@ namespace Timeline.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly DbContext _context;
+        private readonly IUserRepository _userRepository;
+        private readonly ApplicationDBContext _context;
         
-        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager,DbContext context)
+        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager,IUserRepository userRepository,ApplicationDBContext context)
         {
             _userManager = userManager;
             _tokenService = tokenService;
             _signInManager = signInManager;
+            _userRepository = userRepository;
             _context = context;
         }
 
@@ -104,8 +108,9 @@ namespace Timeline.Controllers
         {
             var username = User.GetUsername();
             var appUser = await _userManager.FindByNameAsync(username);
-        
-            return appUser.toConnectionListFromUser();
+            var connections = await _userRepository.GetAllConnectionsAsync(appUser);
+            
+            return connections;
         }
         
         [Authorize]
@@ -126,7 +131,10 @@ namespace Timeline.Controllers
             {
                 var newConnectionUser = await _userManager.FindByNameAsync(newConnection);
                 appUser.Friends.Add(newConnectionUser);
-                await _userManager.UpdateAsync(appUser);
+                // newConnectionUser.Friends.Add(appUser);
+                
+                IdentityResult result = await _userManager.UpdateAsync(appUser);
+                
 
                 return Ok();
             }

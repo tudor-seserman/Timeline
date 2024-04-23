@@ -14,7 +14,6 @@ public class ApplicationDBContext : IdentityDbContext<AppUser>
     {
         // _configuration = configuration;
     }
-    
     public DbSet<TEvent> TEvents { get; set; }
     public DbSet<TTimeline> TTimelines { get; set; }
     public DbSet<UserTTimeline> UserTTimelines { get; set; }
