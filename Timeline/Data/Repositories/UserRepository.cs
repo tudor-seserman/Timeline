@@ -21,4 +21,12 @@ public class UserRepository: IUserRepository
             .Select(f=>new ConnectionDTO(){Name=f.UserName})
             .ToListAsync();
     }
+
+    public Boolean IsUserConnectedtoAnother(AppUser appUser, AppUser potentialConnection)
+    {
+        return _context.Users.Where(user => user.Id == appUser.Id)
+            .SelectMany(user => user.Friends)
+            .Any(f => f == potentialConnection);
+    }
+
 }

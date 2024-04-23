@@ -103,7 +103,7 @@ namespace Timeline.Controllers
         }
         
         [Authorize]
-        [HttpGet("Connections")]
+        [HttpGet("connections")]
         public async Task<ActionResult<List<ConnectionDTO>>> GetConnections()
         {
             var username = User.GetUsername();
@@ -114,7 +114,7 @@ namespace Timeline.Controllers
         }
         
         [Authorize]
-        [HttpPost("Connections")]
+        [HttpPost("connections")]
         public async Task<ActionResult<AppUser>> AddConnection([FromBody]string newConnection)
         {
             if (!ModelState.IsValid)
@@ -123,13 +123,17 @@ namespace Timeline.Controllers
             var username = User.GetUsername();
             
             if (username == newConnection)
-                return BadRequest("You should aready be in touch with yourself!");
+                return BadRequest("You should already be in touch with yourself!");
             
             var appUser = await _userManager.FindByNameAsync(username);
 
             try
             {
                 var newConnectionUser = await _userManager.FindByNameAsync(newConnection);
+                
+                if(_userRepository.IsUserConnectedtoAnother(appUser,newConnectionUser))
+                    return BadRequest("You are already friends.");
+                    
                 appUser.Friends.Add(newConnectionUser);
                 // newConnectionUser.Friends.Add(appUser);
                 
@@ -141,6 +145,42 @@ namespace Timeline.Controllers
             catch(Exception e)
             {
                 return StatusCode(500, "User not found.");
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("connections")]
+        public async Task<ActionResult<AppUser>> EndConnection([FromBody] ConnectionDTO connection)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            try
+            {
+                var username = User.GetUsername();
+                
+                if (username == connection.Name)
+                    return BadRequest("You are not friends with yourself.");
+
+                var appUser = await _userManager.FindByNameAsync(username);
+                var connectionToDelete = await _userManager.FindByNameAsync(connection.Name);
+                
+                if (!_userRepository.IsUserConnectedtoAnother(appUser, connectionToDelete))
+                    return BadRequest("You are not friends.");
+
+                await _context.Entry(appUser)
+                    .Collection(u => u.Friends)
+                    .LoadAsync();
+             
+                appUser.Friends.Remove(connectionToDelete);
+                
+                
+                IdentityResult result = await _userManager.UpdateAsync(appUser);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e); 
             }
         }
     }
