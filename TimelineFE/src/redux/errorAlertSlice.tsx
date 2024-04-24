@@ -21,4 +21,4 @@ export const { createErrorMsg, resetState } = slice.actions
 
 export default slice.reducer
 
-export const currentAlerts = (state: RootState) => state.errorAlert
+export const currentErrorAlerts = (state: RootState) => state.errorAlert

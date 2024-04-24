@@ -17,11 +17,10 @@ const AddConnectionSchema = z.object({
 export type AddConnectionValues = z.infer<typeof AddConnectionSchema>
 
 interface AddConnectionFormProps {
-    successMessage: (connectionName: string) => void
-    setConnectionWindow: Dispatch<SetStateAction<boolean>>
+    success: (connectionName: string) => void
 }
 
-export default function AddConnectionForm({ successMessage, setConnectionWindow }: AddConnectionFormProps) {
+export default function AddConnectionForm({ success }: AddConnectionFormProps) {
     const [connect] = useCreateConnectionMutation()
     const { setApiError } = useError();
 
@@ -47,8 +46,7 @@ export default function AddConnectionForm({ successMessage, setConnectionWindow 
         try {
             await connect(addConnectionDTO).unwrap()
             reset();
-            successMessage(data.connectionUsername);
-            setConnectionWindow(false);
+            success(data.connectionUsername);
         } catch (error: unknown) {
             console.log(error)
             setApiError(error as IBackendResponse);

@@ -1,29 +1,31 @@
 import { Dialog } from "primereact/dialog";
-import { Dispatch, SetStateAction, useRef } from "react";
+import { Dispatch, SetStateAction } from "react";
 import AddConnectionForm from "./AddConnectionForm";
-import { Toast } from "primereact/toast";
+import { useAlert } from "../../hooks/useAlert";
 
 interface AddConnectionProps {
     connectionWindow: boolean
     setConnectionWindow: Dispatch<SetStateAction<boolean>>
 }
 export default function AddConnection({ connectionWindow, setConnectionWindow }: AddConnectionProps) {
-    const toast = useRef<Toast>(null);
+    const { setAlert } = useAlert();
 
-    const successMessage = (connectionName: string) => {
-        toast.current?.show({
+    const success = (connectionName: string) => {
+        setAlert({
             severity: "success",
             summary: `You are now connected with ${connectionName}`,
         });
+        setTimeout(() => setConnectionWindow(false), 0);
     }
+
 
     return (
         <>
-            <Toast ref={toast} />
+
             <div className="card flex justify-content-center">
                 {/* <Button label="Show" icon="pi pi-external-link" onClick={() => setVisible(true)} /> */}
                 <Dialog header="Add Connection" visible={connectionWindow} style={{ width: '50vw' }} onHide={() => { setConnectionWindow(false) }}>
-                    <AddConnectionForm setConnectionWindow={setConnectionWindow} successMessage={successMessage} />
+                    <AddConnectionForm success={success} />
                 </Dialog>
             </div>
         </>
