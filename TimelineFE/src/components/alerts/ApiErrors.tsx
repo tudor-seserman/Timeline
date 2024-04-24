@@ -17,6 +17,7 @@ export const ApiErrors = () => {
     }
 
     if (errorAlerts != null) {
+        console.log(errorAlerts)
         errorsToShow = errorAlerts.map(alert => { return { severity: alert.severity, summary: 'Error', detail: alert.message, life: 3000 } })
         showError(errorsToShow)
         clearError()

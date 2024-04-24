@@ -8,6 +8,7 @@ export const useError = () => {
     const dispatch = useDispatch();
 
     const handleApiError = (apiErrorToHandle: IBackendResponse) => {
+
         if (apiErrorToHandle.status == 500) {
             if (Array.isArray(apiErrorToHandle.data)) {
                 const errors = apiErrorToHandle?.data?.map(e => {
@@ -18,7 +19,7 @@ export const useError = () => {
                 });
                 dispatch(createErrorMsg(errors as IAlert[]))
             }
-        } else if (apiErrorToHandle.originalStatus == 401) {
+        } else if ((apiErrorToHandle.originalStatus && apiErrorToHandle.originalStatus >= 400) || (apiErrorToHandle.originalStatus && apiErrorToHandle.originalStatus >= 415)) {
             dispatch(createErrorMsg([{
                 severity: "error",
                 message: apiErrorToHandle.data

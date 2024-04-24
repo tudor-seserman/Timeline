@@ -1,17 +1,20 @@
 import { Menubar } from 'primereact/menubar';
 import { MenuItem } from 'primereact/menuitem';
 import { useNavigate } from 'react-router-dom';
-import { ApiErrors } from '../errors/ApiErrors';
 import { logout } from '../../redux/authSlice';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../hooks/useRedux';
-import { classNames } from 'primereact/utils';
+import IReactChildren from '../../interfaces/IReactChildren';
+import AddConnection from '../connections/AddConnection';
+import { useState } from 'react';
+import Alerts from '../alerts/Alerts';
 
 
-export const NavBar = () => {
+export const NavBar = ({ children }: IReactChildren) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     let loggedInUser = useAppSelector(state => state.auth.token);
+    const [connectionWindow, setConnectionWindow] = useState(false);
 
     const items: MenuItem[] = [
         {
@@ -30,7 +33,18 @@ export const NavBar = () => {
             id: 'nav3',
             label: 'Connections',
             visible: loggedInUser != null,
-            command: () => { navigate('/connections') },
+            items: [{
+                id: 'nav3sub1',
+                label: 'All',
+                command: () => { navigate('/connections') }
+            }
+                ,
+            {
+                id: 'nav3sub2',
+                label: 'Add New',
+                command: () => { setConnectionWindow(true) }
+            },
+            ]
         },
         {
             id: 'nav4',
@@ -63,7 +77,9 @@ export const NavBar = () => {
                     start="Timelines"
                     model={items} />
             </div>
-            <ApiErrors />
+            <Alerts />
+            {connectionWindow && <AddConnection connectionWindow={connectionWindow} setConnectionWindow={setConnectionWindow} />}
+            {children}
         </>
     )
 }

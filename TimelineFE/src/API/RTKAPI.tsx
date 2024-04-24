@@ -10,7 +10,7 @@ import { IBackendEventDTO } from '../interfaces/IBackendEventDTO'
 import IEditEventDTO from '../interfaces/IEditEventDTO'
 import ICreateEventDTO from '../interfaces/ICreateEventDTO'
 import IEditTimelineDTO from '../interfaces/IEditTimelineDTO'
-import IBackendConnectionsDTO from '../interfaces/IBackendConnectionsDTO'
+import IBackendConnectionDTO from '../interfaces/IBackendConnectionDTO'
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({
@@ -99,21 +99,23 @@ export const api = createApi({
             }),
             invalidatesTags: ["Events"]
         }),
-        getAllUserConnections: builder.query<IBackendConnectionsDTO[], void>({
-            query: () => '/Account/Connections',
+        getAllUserConnections: builder.query<IBackendConnectionDTO[], void>({
+            query: () => '/Account/connections',
             providesTags: ["Connections"],
-        }), createConnection: builder.mutation<IBackendResponse, string>({
+        }),
+        createConnection: builder.mutation<IBackendResponse, IBackendConnectionDTO>({
             query: (dto) => ({
-                url: '/Account/Connections',
+                url: '/Account/connections',
                 method: 'POST',
                 body: dto,
             }),
             invalidatesTags: ["Connections"]
         }),
-        deleteConnection: builder.mutation<IBackendResponse, string>({
-            query: (string) => ({
-                url: `/Account/Connections/${string}`,
+        deleteConnection: builder.mutation<IBackendResponse, IBackendConnectionDTO>({
+            query: (dto) => ({
+                url: `/Account/connections`,
                 method: 'DELETE',
+                body: dto,
             }),
             invalidatesTags: ["Connections"]
         }),
@@ -135,4 +137,7 @@ export const { useRegisterMutation,
     useCreateEventMutation,
     useEditEventMutation,
     useDeleteEventMutation,
+    useCreateConnectionMutation,
+    useDeleteConnectionMutation,
+    useGetAllUserConnectionsQuery
 } = api

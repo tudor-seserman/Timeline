@@ -115,21 +115,20 @@ namespace Timeline.Controllers
         
         [Authorize]
         [HttpPost("connections")]
-        public async Task<ActionResult<AppUser>> AddConnection([FromBody]string newConnection)
+        public async Task<ActionResult<AppUser>> AddConnection([FromBody]ConnectionDTO newConnection)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+           
             
             var username = User.GetUsername();
             
-            if (username == newConnection)
+            if (username == newConnection.Name)
                 return BadRequest("You should already be in touch with yourself!");
             
             var appUser = await _userManager.FindByNameAsync(username);
 
             try
             {
-                var newConnectionUser = await _userManager.FindByNameAsync(newConnection);
+                var newConnectionUser = await _userManager.FindByNameAsync(newConnection.Name);
                 
                 if(_userRepository.IsUserConnectedtoAnother(appUser,newConnectionUser))
                     return BadRequest("You are already friends.");

@@ -17,8 +17,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
       <PrimeReactProvider>
         <BrowserRouter>
-          <NavBar />
-          <App />
+          <NavBar >
+            <App />
+          </NavBar>
         </BrowserRouter>
       </PrimeReactProvider>
     </Provider>
