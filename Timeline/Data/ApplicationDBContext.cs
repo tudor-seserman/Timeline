@@ -38,6 +38,7 @@ public class ApplicationDBContext : IdentityDbContext<AppUser>
             .HasOne(ut => ut.TTimeline)
             .WithMany(t => t.UserTTimelines)
             .HasForeignKey(ut => ut.TTimelineId);
+        
         builder.Entity<AppUser>()
             .HasMany(e => e.Friends)
             .WithMany();

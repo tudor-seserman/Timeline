@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Timeline.Helpers.DTOs.Connections;
 using Timeline.Helpers.DTOs.Timeline;
+using Timeline.Helpers.Mappers;
 using Timeline.Interfaces.Data;
 using Timeline.Models;
 
@@ -14,21 +16,9 @@ public class TimelineRepository : ITimelineRepository
         _context = context;
     }
 
-    public async Task<List<TTimeline>> GetUserTTimelines(AppUser appUser)
+    public async Task<List<TimelineDTO>> GetUserTTimelines(AppUser appUser)
     {
-        return await _context.UserTTimelines.Where(u => u.AppUser == appUser).Select(ttimeline => new TTimeline()
-        {
-            Id = ttimeline.TTimelineId,
-            Name = ttimeline.TTimeline.Name,
-            Description = ttimeline.TTimeline.Description,
-            DateCreated = ttimeline.TTimeline.DateCreated,
-            DateStarted = ttimeline.TTimeline.DateStarted,
-            DateFinished = ttimeline.TTimeline.DateFinished,
-            UserTTimelines = ttimeline.TTimeline.UserTTimelines,
-            Events = ttimeline.TTimeline.Events,
-            Creator = ttimeline.TTimeline.Creator,
-
-        }).ToListAsync();
+        return await _context.UserTTimelines.Where(u => u.AppUser == appUser).Select(ttimeline => ttimeline.ToTimelineDTOfromUserTimeline()).ToListAsync();
     }
 
     public async Task<List<TEvent>> GetTimelineEventsAsyncFromTimelineId(int id)
@@ -91,6 +81,27 @@ public class TimelineRepository : ITimelineRepository
         
         await _context.SaveChangesAsync();
         
+        return tTimeline;
+    }
+
+    public async Task<TTimeline> AddConnectionAsync(int id, AppUser appUser)
+    {
+        var tTimeline = await _context.TTimelines.FindAsync(id);
+        
+        // Make sure user is not already in timeline
+        var existing = await _context.UserTTimelines.Where(ut => ut.AppUserId == appUser.Id && ut.TTimelineId==tTimeline.Id).ToListAsync();
+        if (existing.Count>0)
+            throw new Exception("Connection is already part of the Timeline");
+        
+        await _context.UserTTimelines.AddAsync(new UserTTimeline()
+        {
+            AppUser = appUser,
+            AppUserId = appUser.Id,
+            TTimeline = tTimeline,
+            TTimelineId = tTimeline.Id
+        });
+        
+        await _context.SaveChangesAsync();
         return tTimeline;
     }
 }
