@@ -13,6 +13,7 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 import { InputText } from 'primereact/inputtext';
 import { FloatLabel } from "primereact/floatlabel";
 import ConnectionGroup from '../components/connections/ConnectionGroup';
+import { useAppSelector } from '../hooks/useRedux';
 
 
 
@@ -20,6 +21,7 @@ export default function DashPage() {
     const navigate = useNavigate();
     let location = useLocation();
     const { isLoading, data } = useGetAllUserTimelinesQuery();
+    let username = useAppSelector(state => state.auth.username);
     const [layout, setLayout] = useState<"grid" | "list" | (string & Record<string, unknown>) | undefined>('grid');
     const toast = useRef<Toast>(null);
     const [search, setSearch] = useState<string>("")
@@ -62,7 +64,7 @@ export default function DashPage() {
                         </div>
                         <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2  ">
                             <SelectButton timelineId={timeline.id} />
-                            <EditButton timelineId={timeline.id} />
+                            {username === timeline.creator.name && <EditButton timelineId={timeline.id} />}
                         </div>
                     </div>
                 </div>
@@ -89,7 +91,7 @@ export default function DashPage() {
                     </div>
                     <div className="flex align-items-center justify-content-between">
                         <SelectButton timelineId={timeline.id} />
-                        <EditButton timelineId={timeline.id} />
+                        {username === timeline.creator.name && <EditButton timelineId={timeline.id} />}
                     </div>
                 </div>
             </div >

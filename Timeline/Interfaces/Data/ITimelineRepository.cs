@@ -12,6 +12,7 @@ public interface ITimelineRepository
     Task<TTimeline> GetAsyncTTimelineById(int id);
     Task<TTimeline?> UpdateAsync(int id, EditTimelineDTO editTimelineDTO);
     Task<TTimeline> AddConnectionAsync(int id, AppUser appUser);
+    Task<TTimeline> RemoveConnectionAsync(int id, AppUser appUser);
 
     // Task<TTimeline> DeleteTTimeline(TTimeline timeline);
 }

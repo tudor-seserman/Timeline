@@ -104,4 +104,19 @@ public class TimelineRepository : ITimelineRepository
         await _context.SaveChangesAsync();
         return tTimeline;
     }
+    
+    public async Task<TTimeline>RemoveConnectionAsync(int id, AppUser appUser)
+    {
+        var tTimeline = await _context.TTimelines.FindAsync(id);
+        
+        // Make sure user is not already in timeline
+        var existing = await _context.UserTTimelines.Where(ut => ut.AppUserId == appUser.Id && ut.TTimelineId==tTimeline.Id).ExecuteDeleteAsync();
+        if (existing==0)
+            throw new Exception("Connection is not part of the Timeline");
+        
+        
+        await _context.SaveChangesAsync();
+        
+        return tTimeline;
+    }
 }

@@ -116,29 +116,37 @@ namespace Timeline.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTTimeline(int id, EditTimelineDTO editTimelineDto)
         {
+            if (!TTimelineExists(id))
+            {
+                return NotFound();
+            }
+            
+            var username = User.GetUsername();
+            var appUser = await _userManager.FindByNameAsync(username);
+            var tTimeline = await _context.TTimelines.FindAsync(id);
+
             if (id != editTimelineDto.Id)
             {
                 return BadRequest();
             }
-            
-            try
-            {
-                var updateAsync = await _timelineRepository.UpdateAsync(id, editTimelineDto);
-                return Ok(updateAsync);;
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TTimelineExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
+            if (appUser == tTimeline.Creator)
+            {
+                try
+                {
+                    var updateAsync = await _timelineRepository.UpdateAsync(id, editTimelineDto);
+                    return Ok(updateAsync);
+                    ;
+                }
+                catch (Exception e)
+                {
+                    return StatusCode(500, e);
+                }
+            }
+            else
+            {
+                return BadRequest("Only the creator can edit timelines");
+            }
         }
         
         [HttpPost]
@@ -168,16 +176,25 @@ namespace Timeline.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTTimeline(int id)
         {
+            var username = User.GetUsername();
+            var appUser = await _userManager.FindByNameAsync(username);
             var tTimeline = await _context.TTimelines.FindAsync(id);
             if (tTimeline == null)
             {
                 return NotFound();
             }
 
-            _context.TTimelines.Remove(tTimeline);
-            await _context.SaveChangesAsync();
+            if (appUser == tTimeline.Creator)
+            {
+                _context.TTimelines.Remove(tTimeline);
+                await _context.SaveChangesAsync();
 
-            return NoContent();
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest("Only the creator can delete timelines");
+            }
         }
         
         // PUT: api/Timeline/5/addConnection
@@ -216,6 +233,48 @@ namespace Timeline.Controllers
             {
                
                 return StatusCode(500, e); 
+            }
+        }
+        
+        [Authorize]
+        [HttpDelete("{id}/removeConnection")]
+        public async Task<IActionResult> DeleteConnectionFromTTimeline(int id, ConnectionDTO connectionDto)
+        {
+            if (!TTimelineExists(id))
+            {
+                return NotFound("Timeline not found!");
+            }
+
+            var timeline = await _timelineRepository.GetAsyncTTimelineById(id);
+            
+            var username = User.GetUsername();
+            
+            var appUser = await _userManager.FindByNameAsync(username);
+            
+            var connectionUser = await _userManager.FindByNameAsync(connectionDto.Name);
+            
+            if (connectionUser == null)
+            {
+                return NotFound("Connection not found!");
+            }
+
+            if (appUser == timeline.Creator || appUser == connectionUser)
+            {
+                try
+                {
+                    var updateAsync = await _timelineRepository.RemoveConnectionAsync(id, connectionUser);
+                    return Ok(updateAsync);
+                    ;
+                }
+                catch (Exception e)
+                {
+
+                    return StatusCode(500, e);
+                }
+            }
+            else
+            {
+                return BadRequest("Only the creator of the Timeline can remove other members."); 
             }
         }
 
