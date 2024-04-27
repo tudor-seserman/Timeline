@@ -1,3 +1,7 @@
 Display time if originally selected
 
 Calender Date Display
+
+If Connection Removed remove from timelines option
+
+only creator can edit or delete timelines

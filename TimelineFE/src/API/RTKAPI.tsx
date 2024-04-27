@@ -81,6 +81,14 @@ export const api = createApi({
             }),
             invalidatesTags: ["Timeline", "Timelines"]
         }),
+        removeConnectionFromTimeline: builder.mutation<IBackendResponse, { id: Number, backendConnectionDTO: IBackendConnectionDTO }>({
+            query: ({ id, backendConnectionDTO }) => ({
+                url: `/Timeline/${id}/removeConnection`,
+                method: 'Delete',
+                body: backendConnectionDTO,
+            }),
+            invalidatesTags: ["Timeline", "Timelines"]
+        }),
         getAllTimelineEvents: builder.query<IBackendEventDTO[], Number>({
             query: (timelineId) => `/Timeline/Events/${timelineId}`,
             providesTags: ["Events"],
@@ -142,6 +150,7 @@ export const { useRegisterMutation,
     useCreateTimelineMutation,
     useEditTimelineMutation,
     useAddConnectionToTimelineMutation,
+    useRemoveConnectionFromTimelineMutation,
     useDeleteTimelineMutation,
     useGetAllTimelineEventsQuery,
     useCreateEventMutation,

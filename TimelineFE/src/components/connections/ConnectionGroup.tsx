@@ -10,9 +10,10 @@ interface ConnectionGroupProps {
     timelineId: Number
     creator: IBackendConnectionDTO
     connections: IBackendConnectionDTO[]
+    removeConnection?: Boolean
 }
 
-export default function ConnectionGroup({ timelineName, timelineId, connections, creator }: ConnectionGroupProps) {
+export default function ConnectionGroup({ timelineName, timelineId, connections, creator, removeConnection }: ConnectionGroupProps) {
     const notCreatorConnections = connections.filter(connection => connection.name != creator.name)
 
     const opRef = useRef<OverlayPanel | null>(null);
@@ -30,7 +31,7 @@ export default function ConnectionGroup({ timelineName, timelineId, connections,
                 <ConnectionAvatarGroup connections={notCreatorConnections} creator={creator} />
             </div>
             <OverlayPanel className="bg-OJ" ref={opRef}>
-                <ConnectionInTimelineDetails connections={notCreatorConnections} creator={creator} />
+                <ConnectionInTimelineDetails connections={notCreatorConnections} creator={creator} removeConnection={removeConnection} timelineId={timelineId} />
                 <AddConnectionToTimeline timelineName={timelineName} timelineId={timelineId} />
             </OverlayPanel>
         </>
