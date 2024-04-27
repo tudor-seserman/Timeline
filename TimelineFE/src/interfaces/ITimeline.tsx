@@ -1,3 +1,4 @@
+import IBackendConnectionDTO from "./IBackendConnectionDTO"
 import IEvent from "./IEvent"
 
 export default interface ITimeline {
@@ -8,4 +9,6 @@ export default interface ITimeline {
     dateStarted?: Date
     dateFinished?: Date
     events?: IEvent[] | undefined
+    userTTimelines: IBackendConnectionDTO[]
+    creator: IBackendConnectionDTO
 }

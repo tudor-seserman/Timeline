@@ -5,7 +5,8 @@ import { Card } from "primereact/card";
 import CreateEventForm from "../components/timeline/CreateEventForm";
 import TimelineEvents from "../components/timeline/TimelineEvents";
 import { ProgressSpinner } from "primereact/progressspinner";
-import IEvent from "../interfaces/IEvent";
+import ConnectionGroup from "../components/connections/ConnectionGroup";
+import IBackendConnectionDTO from "../interfaces/IBackendConnectionDTO";
 
 export default function TimelinePage() {
     const { timelineId } = useParams();
@@ -16,18 +17,24 @@ export default function TimelinePage() {
         if (isError) { return navigate("/dash", { state: { timelineError: "Could not find Timeline!" } }) }
     }, [isError, navigate]);
 
+    if (currentTimeline == undefined) {
+        return (<div className="card justify-content-center">
+            {isLoading && <ProgressSpinner />}
+        </div>)
+    }
+
     return (
         <>
-            <div className="card justify-content-center">
+            <div className="card flex justify-content-center">
                 {isLoading && <ProgressSpinner />}
-                <Card title={currentTimeline?.name} >
+                <Card title={currentTimeline.name} className="shadow-none" >
                     <p className="m-0">
-                        {currentTimeline?.description}
-                        {currentTimeline?.events?.map((e: IEvent) => { return (<>{e.name}</>) })}
+                        {currentTimeline.description}
                     </p>
-                </Card>
-            </div>
-            <CreateEventForm timelineId={currentTimeline?.id} />
-            <TimelineEvents timelineId={currentTimeline?.id} />
+                    <ConnectionGroup timelineName={currentTimeline.name} timelineId={currentTimeline.id} connections={currentTimeline.userTTimelines as IBackendConnectionDTO[]} creator={currentTimeline.creator as IBackendConnectionDTO} />
+                </Card >
+            </div >
+            <CreateEventForm timelineId={currentTimeline.id} />
+            <TimelineEvents timelineId={currentTimeline.id} />
         </>)
 }

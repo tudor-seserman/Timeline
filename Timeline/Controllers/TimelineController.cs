@@ -68,10 +68,24 @@ namespace Timeline.Controllers
 
         // GET: api/Timeline/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TTimeline>> GetTTimeline(int id)
+        public async Task<ActionResult<TimelineDTO>> GetTTimeline(int id)
         {
-            var tTimeline = await _context.TTimelines.FindAsync(id);
+            // var tTimeline = await _context.TTimelines.FindAsync(id);
+            var tTimeline = await _context.TTimelines.Where(t => t.Id == id).Select(ttimeline => new TimelineDTO()
+            {
+                Id = ttimeline.Id,
+                Name = ttimeline.Name,
+                Description = ttimeline.Description,
+                DateCreated = ttimeline.DateCreated,
+                DateStarted = ttimeline.DateStarted,
+                DateFinished = ttimeline.DateFinished,
+                UserTTimelines = ttimeline.UserTTimelines
+                    .Select(ut => new ConnectionDTO() { Name = ut.AppUser.UserName ?? "" }).ToList(),
+                Events = ttimeline.Events,
+                Creator = new ConnectionDTO() { Name = ttimeline.Creator.UserName ?? "" },
 
+            }).FirstOrDefaultAsync();
+            
             if (tTimeline == null)
             {
                 return NotFound();

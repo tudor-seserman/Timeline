@@ -5,45 +5,55 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { z } from "zod";
 import { useError } from "../../hooks/useError";
 import { InputText } from "primereact/inputtext";
-import { useCreateConnectionMutation } from "../../API/RTKAPI";
 import { IBackendResponse } from "../../interfaces/IBackendResponse";
 import IBackendConnectionDTO from "../../interfaces/IBackendConnectionDTO";
+import { useAddConnectionToTimelineMutation } from "../../API/RTKAPI";
+import { useAlert } from "../../hooks/useAlert";
 
-const AddConnectionSchema = z.object({
+const AddConnectionToTimelineSchema = z.object({
     connectionUsername: z.string().min(1),
 })
 
-export type AddConnectionValues = z.infer<typeof AddConnectionSchema>
+export type AddConnectionToTimelineValues = z.infer<typeof AddConnectionToTimelineSchema>
 
-interface AddConnectionFormProps {
-    success: (connectionName: string) => void
+interface AddConnectionToTimelineFormProps {
+    timelineName: string
+    timelineId: Number
 }
 
-export default function AddConnectionForm({ success }: AddConnectionFormProps) {
-    const [connect] = useCreateConnectionMutation()
+export default function AddConnectionToTimelineForm({ timelineName, timelineId }: AddConnectionToTimelineFormProps) {
+    const [addConnection] = useAddConnectionToTimelineMutation()
     const { setApiError } = useError();
+    const { setAlert } = useAlert();
+
+    const success = (connectionName: string) => {
+        setAlert({
+            severity: "success",
+            summary: `${connectionName} has been added to ${timelineName}`,
+        });
+    }
 
 
     const { control,
         formState: { errors, isSubmitting },
         handleSubmit,
         reset }
-        = useForm<AddConnectionValues>({
+        = useForm<AddConnectionToTimelineValues>({
             mode: "all",
             reValidateMode: "onBlur",
-            resolver: zodResolver(AddConnectionSchema),
+            resolver: zodResolver(AddConnectionToTimelineSchema),
             defaultValues: {
                 connectionUsername: "",
             }
         });
 
-    const onSubmit: SubmitHandler<AddConnectionValues> = async (data) => {
+    const onSubmit: SubmitHandler<AddConnectionToTimelineValues> = async (data) => {
         const addConnectionDTO: IBackendConnectionDTO = {
             name: data.connectionUsername
         }
 
         try {
-            await connect(addConnectionDTO).unwrap()
+            await addConnection({ id: timelineId, backendConnectionDTO: addConnectionDTO }).unwrap()
             reset();
             success(data.connectionUsername);
         } catch (error: unknown) {
@@ -70,7 +80,7 @@ export default function AddConnectionForm({ success }: AddConnectionFormProps) {
                 {errors.connectionUsername && <small className="p-error">{errors.connectionUsername.message}</small>}
             </div>
 
-            <Button disabled={isSubmitting} className="mt-2" type="submit" label={isSubmitting ? "Sending..." : "Make connection"} />
+            <Button disabled={isSubmitting} className="mt-2" type="submit" label={isSubmitting ? "Sending..." : "Add Connection to Timeline"} />
 
         </form>
     )

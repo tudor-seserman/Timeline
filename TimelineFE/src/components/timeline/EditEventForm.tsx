@@ -49,7 +49,7 @@ export default function EditEventForm({ editToggle, event, toggle }: EditEventFo
 
 
     return (
-        <Card >
+        <Card className="shadow-none">
             <div className="flex justify-content-center">
                 <div className="card">
                     <EventForm submitHandler={onSubmit} success={isSuccess} action="Edit" populatedValues={populatedValues} />

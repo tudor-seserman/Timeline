@@ -12,6 +12,8 @@ import { Toast } from 'primereact/toast';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { InputText } from 'primereact/inputtext';
 import { FloatLabel } from "primereact/floatlabel";
+import ConnectionGroup from '../components/connections/ConnectionGroup';
+
 
 
 export default function DashPage() {
@@ -56,6 +58,7 @@ export default function DashPage() {
                                 </span>
                                 <Tag value={product.inventoryStatus} severity={getSeverity(product)}></Tag>
                             </div> */}
+                            <ConnectionGroup timelineName={timeline.name} timelineId={timeline.id as Number} connections={timeline.userTTimelines} creator={timeline.creator} />
                         </div>
                         <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2  ">
                             <SelectButton timelineId={timeline.id} />
@@ -81,6 +84,8 @@ export default function DashPage() {
                     <div className="flex flex-column align-items-center gap-3 py-5">
                         {/* <img className="w-9 shadow-2 border-round" src={`https://primefaces.org/cdn/primereact/images/product/${product.image}`} alt={product.name} /> */}
                         <div className="text-2xl font-bold">{timeline.name}</div>
+                        <ConnectionGroup timelineName={timeline.name} timelineId={timeline.id as Number} connections={timeline.userTTimelines} creator={timeline.creator} />
+
                     </div>
                     <div className="flex align-items-center justify-content-between">
                         <SelectButton timelineId={timeline.id} />

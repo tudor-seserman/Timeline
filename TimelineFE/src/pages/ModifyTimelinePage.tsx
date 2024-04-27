@@ -4,6 +4,8 @@ import EditTimelineForm from "../components/timeline/EditTimelineForm";
 import { useEffect } from "react";
 import DeleteTimeline from "../components/timeline/DeleteTimeline";
 import { Card } from "primereact/card";
+import ConnectionGroup from "../components/connections/ConnectionGroup";
+import IBackendConnectionDTO from "../interfaces/IBackendConnectionDTO";
 
 
 export default function ModifyTimelinePage() {
@@ -21,7 +23,10 @@ export default function ModifyTimelinePage() {
     return (
         <div className="bg-Blu">
             {timeline != undefined &&
-                <Card title={`Edit ${timeline.name}`} >
+                <Card title={`Edit ${timeline.name}`}>
+                    <div className="flex justify-content-center" >
+                        <ConnectionGroup timelineName={timeline.name} timelineId={timeline.id} connections={timeline.userTTimelines as IBackendConnectionDTO[]} creator={timeline.creator as IBackendConnectionDTO} removeConnection />
+                    </div>
                     <EditTimelineForm timeline={timeline} />
                     <DeleteTimeline timeline={timeline} />
                 </Card>}

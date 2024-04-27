@@ -24,7 +24,7 @@ export const api = createApi({
             return headers
         },
     }),
-    tagTypes: ["Timelines", "Events", "Connections"],
+    tagTypes: ["Timeline", "Timelines", "Events", "Connections"],
     endpoints: (builder) => ({
         login: builder.mutation<IUserResponse, ILoginDTO>({
             query: (credentials) => ({
@@ -32,7 +32,7 @@ export const api = createApi({
                 method: 'POST',
                 body: credentials,
             }),
-            invalidatesTags: ["Timelines", "Events"]
+            invalidatesTags: ["Timeline", "Timelines", "Events", "Connections"]
         }),
         register: builder.mutation<IUserResponse, IRegistrationDTO>({
             query: (credentials) => ({
@@ -40,7 +40,7 @@ export const api = createApi({
                 method: 'POST',
                 body: credentials,
             }),
-            invalidatesTags: ["Timelines", "Events",]
+            invalidatesTags: ["Timeline", "Timelines", "Events", "Connections"]
         }),
         getAllUserTimelines: builder.query<IBackendTimelinesDTO[], void>({
             query: () => '/Timeline',
@@ -48,6 +48,7 @@ export const api = createApi({
         }),
         getTimeline: builder.query<IBackendTimelinesDTO, string>({
             query: (timeLineId) => `/Timeline/${timeLineId}`,
+            providesTags: ["Timeline"],
         }),
         createTimeline: builder.mutation<IBackendResponse, ICreateTimelineDto>({
             query: (dto) => ({
@@ -71,6 +72,14 @@ export const api = createApi({
                 body: editTimelineDTO,
             }),
             invalidatesTags: ["Events", "Timelines"]
+        }),
+        addConnectionToTimeline: builder.mutation<IBackendResponse, { id: Number, backendConnectionDTO: IBackendConnectionDTO }>({
+            query: ({ id, backendConnectionDTO }) => ({
+                url: `/Timeline/${id}/addConnection`,
+                method: 'PUT',
+                body: backendConnectionDTO,
+            }),
+            invalidatesTags: ["Timeline", "Timelines"]
         }),
         getAllTimelineEvents: builder.query<IBackendEventDTO[], Number>({
             query: (timelineId) => `/Timeline/Events/${timelineId}`,
@@ -132,6 +141,7 @@ export const { useRegisterMutation,
     useGetTimelineQuery,
     useCreateTimelineMutation,
     useEditTimelineMutation,
+    useAddConnectionToTimelineMutation,
     useDeleteTimelineMutation,
     useGetAllTimelineEventsQuery,
     useCreateEventMutation,
