@@ -17,7 +17,7 @@ public class UserRepository: IUserRepository
     public async Task<List<ConnectionDTO>> GetAllConnectionsAsync(AppUser appUser)
     {
         return await _context.Users.Where(user => user.Id == appUser.Id)
-            .SelectMany(user =>user.Friends)
+            .SelectMany(user =>user.Connections)
             .Select(f=>new ConnectionDTO(){Name=f.UserName})
             .ToListAsync();
     }
@@ -25,7 +25,22 @@ public class UserRepository: IUserRepository
     public Boolean IsUserConnectedtoAnother(AppUser appUser, AppUser potentialConnection)
     {
         return _context.Users.Where(user => user.Id == appUser.Id)
-            .SelectMany(user => user.Friends)
+            .SelectMany(user => user.Connections)
+            .Any(f => f == potentialConnection);
+    }
+    
+    public async Task<List<ConnectionDTO>> GetAllPendingConnectionsAsync(AppUser appUser)
+    {
+        return await _context.Users.Where(user => user.Id == appUser.Id)
+            .SelectMany(user =>user.PendingConnections)
+            .Select(f=>new ConnectionDTO(){Name=f.UserName})
+            .ToListAsync();
+    }
+
+    public Boolean IsUserPendingConnectedtoAnother(AppUser appUser, AppUser potentialConnection)
+    {
+        return _context.Users.Where(user => user.Id == appUser.Id)
+            .SelectMany(user => user.PendingConnections)
             .Any(f => f == potentialConnection);
     }
 

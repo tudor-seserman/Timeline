@@ -2,6 +2,8 @@ Display time if originally selected
 
 Calender Date Display
 
+Validate that end date is after start time
+
 If Connection Removed remove from timelines option
 
 only creator can edit or delete timelines

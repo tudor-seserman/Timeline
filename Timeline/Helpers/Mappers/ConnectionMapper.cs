@@ -8,7 +8,7 @@ public static class ConnectionMapper
     public static List<ConnectionDTO> toConnectionListFromUser(this AppUser appUser)
     {
         List<ConnectionDTO> connections = new List<ConnectionDTO>();
-        appUser.Friends.ForEach(c=>
+        appUser.Connections.ForEach(c=>
         {
             connections.Add(new ConnectionDTO() { Name = c.UserName }); 
         });
