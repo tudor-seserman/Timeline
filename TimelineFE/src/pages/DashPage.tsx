@@ -114,12 +114,14 @@ export default function DashPage() {
         return (
             <div className="flex justify-between">
                 <Button label="Create New Timeline" onClick={() => navigate("/timelines/create")}> <FontAwesomeIcon icon={faPlus} className="px-1 " /></Button>
-                {/* <FloatLabel> */}
-                <InputText id="search" value={search} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)} />
-                {/* <label for="search">Search</label>
-                        </FloatLabel> */}
+                <div className="justify-content-center">
+                    <FloatLabel>
+                        <InputText id="search" value={search} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)} />
+                        <label htmlFor="search">Search Timelines</label>
+                    </FloatLabel>
+                </div>
                 <DataViewLayoutOptions layout={layout} onChange={(e) => setLayout(e.value)} />
-            </div>
+            </div >
         );
     };
 

@@ -42,10 +42,11 @@ export default function TimelineEvents({ timelineId }: TimelineEventsProps) {
         return (
             <div>
                 <Card title={item.name}
-                    subTitle={item.description}
+                    subTitle={"End Date: " + new Date(item.dateFinished as Date).toLocaleDateString()}
                     onClick={(e) => handleCardClick(e, item)}
                     className="!bg-Cora"
                 >
+                    {item.description}
                 </Card>
             </div>
         );
@@ -53,7 +54,7 @@ export default function TimelineEvents({ timelineId }: TimelineEventsProps) {
 
     return (<>
         {isSuccess && <div className="card">
-            <Timeline value={data} align="alternate" className="customized-timeline" content={customizedContent} />
+            <Timeline value={data} align="alternate" className="customized-timeline p-3" content={customizedContent} />
             <OverlayPanel className="bg-OJ" ref={opRef}>
                 {event && <EventOverlay event={event} setEvent={setEvent} toggle={toggle} />}
             </OverlayPanel>

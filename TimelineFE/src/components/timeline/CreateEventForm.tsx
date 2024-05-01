@@ -37,16 +37,18 @@ export default function CreateEventForm({ timelineId }: CreateEventFormProps) {
 
 
     return (
-        <Panel toggleable collapsed ref={menu} header="Add Event">
-            <Card className="bg-Blu shadow-none" title="Create Event">
-                <div className="registration-form">
-                    <div className="flex justify-content-center">
-                        <div className="card mt-2 mb-1.5 ">
-                            <EventForm submitHandler={onSubmit} success={isSuccess} action="Create" />
+        <div className="bg-Blu">
+            <Panel toggleable collapsed ref={menu} header="Add Event">
+                <Card className="shadow-none" title="Create Event">
+                    <div className="registration-form">
+                        <div className="flex justify-content-center">
+                            <div className="card mt-2 mb-1.5 ">
+                                <EventForm submitHandler={onSubmit} success={isSuccess} action="Create" />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </Card >
-        </Panel >
+                </Card >
+            </Panel >
+        </div >
     );
 }
