@@ -13,9 +13,7 @@ export const useAlert = () => {
     };
 
     useEffect(() => {
-        console.log("alert")
         if (alert != null) {
-            console.log(alert)
             dispatch(createAlert(alert));
         }
     }, [alert])

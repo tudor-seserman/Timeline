@@ -5,7 +5,7 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { z } from "zod";
 import { useError } from "../../hooks/useError";
 import { InputText } from "primereact/inputtext";
-import { useCreateConnectionMutation } from "../../API/RTKAPI";
+import { useRequestConnectionMutation } from "../../API/RTKAPI";
 import { IBackendResponse } from "../../interfaces/IBackendResponse";
 import IBackendConnectionDTO from "../../interfaces/IBackendConnectionDTO";
 
@@ -20,7 +20,7 @@ interface AddConnectionFormProps {
 }
 
 export default function AddConnectionForm({ success }: AddConnectionFormProps) {
-    const [connect] = useCreateConnectionMutation()
+    const [connect] = useRequestConnectionMutation()
     const { setApiError } = useError();
 
 

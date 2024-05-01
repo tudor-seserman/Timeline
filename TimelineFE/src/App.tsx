@@ -8,6 +8,7 @@ import CreateTimelinePage from './pages/CreateTimelinePage';
 import TimelinePage from './pages/TimelinePage';
 import ModifyTimelinePage from './pages/ModifyTimelinePage';
 import ConnectionsPage from './pages/ConnectionsPage';
+import PendingConnectionsPage from './pages/PendingConectionsPage';
 
 
 
@@ -28,7 +29,12 @@ function App() {
             <Route path="/:timelineId" element={<TimelinePage />}></Route>
           </Routes>}
         ></Route>
-        <Route path="/connections" element={<ConnectionsPage />}></Route>
+        <Route path="/connections/*" element={
+          <Routes>
+            <Route path="/" element={<ConnectionsPage />} />
+            <Route path="pending" element={<PendingConnectionsPage />} />
+          </Routes>
+        }></Route>
         <Route path="*" element={<Navigate to="/" replace />}></Route>
       </Routes>
     </>

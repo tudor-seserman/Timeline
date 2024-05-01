@@ -12,7 +12,6 @@ export default function Alerts() {
 
 
     const showAlert = (alert: IToastAlert) => {
-        console.log("hi")
         toast.current?.show(alert);
         clearAlert();
     }

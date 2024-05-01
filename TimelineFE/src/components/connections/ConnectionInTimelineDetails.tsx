@@ -20,9 +20,9 @@ export default function ConnectionInTimelineDetails({ connections, creator, remo
                     <span className="text-xl">{creator.name}</span>
                 </div>
                 {connections.length > 0 && <span className="font-italic">Timeline Connections</span>}
-                {connections.map(connection => {
+                {connections.map((connection, index) => {
                     return (
-                        <div className="flex align-items-center gap-2 p-1">
+                        <div key={index} className="flex align-items-center gap-2 p-1">
                             <Avatar label={connection.name.charAt(0).toLocaleUpperCase()} size="large" shape="circle" style={{ backgroundColor: '#008080', border: 'solid' }} />
                             <span className="text-xl">{connection.name}</span>
                             {removeConnection && <RemoveConnectionFromTimeline connection={connection} timelineId={timelineId} />}

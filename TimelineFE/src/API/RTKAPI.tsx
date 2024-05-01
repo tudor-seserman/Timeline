@@ -24,7 +24,7 @@ export const api = createApi({
             return headers
         },
     }),
-    tagTypes: ["Timeline", "Timelines", "Events", "Connections"],
+    tagTypes: ["Timeline", "Timelines", "Events", "Connections", "PendingConnections"],
     endpoints: (builder) => ({
         login: builder.mutation<IUserResponse, ILoginDTO>({
             query: (credentials) => ({
@@ -32,7 +32,7 @@ export const api = createApi({
                 method: 'POST',
                 body: credentials,
             }),
-            invalidatesTags: ["Timeline", "Timelines", "Events", "Connections"]
+            invalidatesTags: ["Timeline", "Timelines", "Events", "Connections", "PendingConnections"]
         }),
         register: builder.mutation<IUserResponse, IRegistrationDTO>({
             query: (credentials) => ({
@@ -40,7 +40,7 @@ export const api = createApi({
                 method: 'POST',
                 body: credentials,
             }),
-            invalidatesTags: ["Timeline", "Timelines", "Events", "Connections"]
+            invalidatesTags: ["Timeline", "Timelines", "Events", "Connections", "PendingConnections"]
         }),
         getAllUserTimelines: builder.query<IBackendTimelinesDTO[], void>({
             query: () => '/Timeline',
@@ -126,7 +126,7 @@ export const api = createApi({
                 method: 'POST',
                 body: dto,
             }),
-            invalidatesTags: ["Connections"]
+            invalidatesTags: ["PendingConnections", "Connections"]
         }),
         deleteConnection: builder.mutation<IBackendResponse, IBackendConnectionDTO>({
             query: (dto) => ({
@@ -135,6 +135,26 @@ export const api = createApi({
                 body: dto,
             }),
             invalidatesTags: ["Connections"]
+        }),
+        getAllPendingUserConnections: builder.query<IBackendConnectionDTO[], void>({
+            query: () => '/Account/pendingConnections',
+            providesTags: ["PendingConnections"],
+        }),
+        requestConnection: builder.mutation<IBackendResponse, IBackendConnectionDTO>({
+            query: (dto) => ({
+                url: '/Account/requestConnection',
+                method: 'POST',
+                body: dto,
+            }),
+            invalidatesTags: ["PendingConnections", "Connections"]
+        }),
+        denyConnection: builder.mutation<IBackendResponse, IBackendConnectionDTO>({
+            query: (dto) => ({
+                url: `/Account/rejectConnections`,
+                method: 'DELETE',
+                body: dto,
+            }),
+            invalidatesTags: ["PendingConnections"]
         }),
         protected: builder.mutation<{ message: string }, void>({
             query: () => 'protected',
@@ -158,5 +178,10 @@ export const { useRegisterMutation,
     useDeleteEventMutation,
     useCreateConnectionMutation,
     useDeleteConnectionMutation,
-    useGetAllUserConnectionsQuery
+    useGetAllUserConnectionsQuery,
+    useGetAllPendingUserConnectionsQuery,
+    useRequestConnectionMutation,
+    useDenyConnectionMutation,
+
+
 } = api

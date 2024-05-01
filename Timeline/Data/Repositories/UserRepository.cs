@@ -33,6 +33,7 @@ public class UserRepository: IUserRepository
     {
         return await _context.Users.Where(user => user.Id == appUser.Id)
             .SelectMany(user =>user.PendingConnections)
+            // .Where(user => user.Id != appUser.Id)
             .Select(f=>new ConnectionDTO(){Name=f.UserName})
             .ToListAsync();
     }

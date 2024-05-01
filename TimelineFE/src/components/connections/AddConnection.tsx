@@ -13,7 +13,7 @@ export default function AddConnection({ connectionWindow, setConnectionWindow }:
     const success = (connectionName: string) => {
         setAlert({
             severity: "success",
-            summary: `You are now connected with ${connectionName}`,
+            summary: `You have requested a connection with ${connectionName}`,
         });
         setTimeout(() => setConnectionWindow(false), 0);
     }
@@ -23,7 +23,6 @@ export default function AddConnection({ connectionWindow, setConnectionWindow }:
         <>
 
             <div className="card flex justify-content-center">
-                {/* <Button label="Show" icon="pi pi-external-link" onClick={() => setVisible(true)} /> */}
                 <Dialog header="Add Connection" visible={connectionWindow} style={{ width: '50vw' }} onHide={() => { setConnectionWindow(false) }}>
                     <AddConnectionForm success={success} />
                 </Dialog>

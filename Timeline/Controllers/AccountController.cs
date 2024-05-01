@@ -144,7 +144,6 @@ namespace Timeline.Controllers
                 if(_userRepository.IsUserConnectedtoAnother(appUser,newConnectionUser))
                     return BadRequest("You are already friends.");
                     
-                appUser.PendingConnections.Add(newConnectionUser);
                 newConnectionUser.PendingConnections.Add(appUser);
                 
                 IdentityResult result = await _userManager.UpdateAsync(appUser);
@@ -222,7 +221,7 @@ namespace Timeline.Controllers
                 var connectionToDelete = await _userManager.FindByNameAsync(connection.Name);
                 
                 if (!_userRepository.IsUserConnectedtoAnother(appUser, connectionToDelete))
-                    return BadRequest("You are not friends.");
+                    return BadRequest("You are not contected.");
 
                 await _context.Entry(appUser)
                     .Collection(u => u.Connections)
@@ -257,8 +256,6 @@ namespace Timeline.Controllers
                 var appUser = await _userManager.FindByNameAsync(username);
                 var connectionToDelete = await _userManager.FindByNameAsync(connection.Name);
                 
-                if (!_userRepository.IsUserConnectedtoAnother(appUser, connectionToDelete))
-                    return BadRequest("You are not connected.");
 
                 await _context.Entry(appUser)
                     .Collection(u => u.PendingConnections)

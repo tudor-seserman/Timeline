@@ -6,8 +6,10 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../hooks/useRedux';
 import IReactChildren from '../../interfaces/IReactChildren';
 import AddConnection from '../connections/AddConnection';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Alerts from '../alerts/Alerts';
+import { useGetAllPendingUserConnectionsQuery } from '../../API/RTKAPI';
+import { Badge } from 'primereact/badge';
 
 
 export const NavBar = ({ children }: IReactChildren) => {
@@ -15,6 +17,18 @@ export const NavBar = ({ children }: IReactChildren) => {
     const dispatch = useDispatch();
     let loggedInUser = useAppSelector(state => state.auth.token);
     const [connectionWindow, setConnectionWindow] = useState(false);
+    const { data: pendingConnections } = useGetAllPendingUserConnectionsQuery();
+    const [pendingBadge, setPendingBadge] = useState<number>(0);
+
+    useEffect(() => { pendingConnections != undefined ? setPendingBadge(pendingConnections.length) : null }, [pendingConnections])
+
+    const itemRenderer = (item: MenuItem) => (
+        <a className="flex align-items-center p-menuitem-link">
+            <span className={item.icon} />
+            <span className="mx-2">{item.label}</span>
+            {item.badge && (pendingBadge > 0) && <Badge className="ml-auto bg-Cora" value={item.badge} />}
+        </a>
+    );
 
     const items: MenuItem[] = [
         {
@@ -44,6 +58,14 @@ export const NavBar = ({ children }: IReactChildren) => {
                 label: 'Add New',
                 command: () => { setConnectionWindow(true) }
             },
+            {
+                id: 'nav3sub3',
+                label: 'Pending',
+                badge: pendingBadge,
+                template: itemRenderer,
+                visible: pendingConnections != null && pendingConnections.length > 0,
+                command: () => { navigate('/connections/pending') }
+            },
             ]
         },
         {
@@ -62,7 +84,10 @@ export const NavBar = ({ children }: IReactChildren) => {
             id: 'nav6',
             label: 'Logout',
             visible: loggedInUser != null,
-            command: () => { dispatch(logout()); navigate('/login') },
+            command: () => {
+                dispatch(logout()); dispatch(api.util.resetApiState());
+                ; navigate('/login')
+            },
         },
     ];
 
