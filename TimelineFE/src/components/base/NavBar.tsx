@@ -17,18 +17,9 @@ export const NavBar = ({ children }: IReactChildren) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     let loggedInUser = useAppSelector(state => state.auth.token);
-    const [user, setUser] = useState<string | undefined>(undefined)
     const [connectionWindow, setConnectionWindow] = useState(false);
-    const { data: pendingConnections } = useGetAllPendingUserConnectionsQuery(user ?? skipToken);
+    const { data: pendingConnections } = useGetAllPendingUserConnectionsQuery((loggedInUser == null) ? skipToken : void 0);
     const [pendingBadge, setPendingBadge] = useState<number>(0);
-
-    useEffect(() => {
-        if (loggedInUser !== null) {
-            setUser(loggedInUser);
-        } else {
-            setUser(undefined);
-        }
-    }, [loggedInUser]);
 
     useEffect(() => { pendingConnections != undefined ? setPendingBadge(pendingConnections.length) : null }, [pendingConnections])
 
