@@ -5,6 +5,7 @@ import IEvent from '../../interfaces/IEvent';
 import { Card } from 'primereact/card';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import EventOverlay from './EventOverlay';
+import { faLessThan } from '@fortawesome/free-solid-svg-icons';
 
 
 interface TimelineEventsProps {
@@ -14,17 +15,27 @@ interface TimelineEventsProps {
 export default function TimelineEvents({ timelineId }: TimelineEventsProps) {
     const { data, isSuccess } = useGetAllTimelineEventsQuery(timelineId as Number)
     const [event, setEvent] = useState<IEvent | null>(null)
+    const [events, setEvents] = useState<IEvent[]>([])
+    const currentDate = new Date();
+    const currentDateAsTime = currentDate.getTime();
 
-
-    // const customizedMarker = (item: IEvent) => {
-    //     return (
-    //         <span className="flex w-2rem h-2rem align-items-center justify-content-center text-white border-circle z-1 shadow-1" style={{ backgroundColor: item.color }}>
-    //             <i className={item.icon}></i>
-    //         </span>
-    //     );
-    // };
 
     const opRef = useRef<OverlayPanel | null>(null);
+
+    useEffect(() => {
+        if (data != undefined) {
+            const newArr: IEvent[] = [];
+            data.map(a => newArr.push(a))
+            newArr.sort((a, b) => {
+                const dateA = (a.dateFinished !== undefined) ? new Date(a.dateFinished) : currentDate;
+                const dateB = (b.dateFinished !== undefined) ? new Date(b.dateFinished) : currentDate;
+
+                return dateA.getTime() - dateB.getTime();
+            })
+            setEvents(newArr);
+
+        }
+    }, [data])
 
 
     const toggle = () => { if (opRef.current) { opRef.current.toggle(null) } };
@@ -36,6 +47,15 @@ export default function TimelineEvents({ timelineId }: TimelineEventsProps) {
         }
     };
 
+    const highlightPastDueEvents = (item: IEvent) => {
+        if (!!item.dateFinished) {
+            if (new Date(item.dateFinished).getTime() >= currentDateAsTime) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     const customizedContent = (item: IEvent) => {
 
@@ -44,7 +64,7 @@ export default function TimelineEvents({ timelineId }: TimelineEventsProps) {
                 <Card title={item.name}
                     subTitle={"End Date: " + new Date(item.dateFinished as Date).toLocaleDateString()}
                     onClick={(e) => handleCardClick(e, item)}
-                    className="!bg-Cora"
+                    className={highlightPastDueEvents(item) ? "!bg-Cora" : "!bg-OJ"}
                 >
                     {item.description}
                 </Card>
@@ -54,7 +74,7 @@ export default function TimelineEvents({ timelineId }: TimelineEventsProps) {
 
     return (<>
         {isSuccess && <div className="card">
-            <Timeline value={data} align="alternate" className="customized-timeline p-3" content={customizedContent} />
+            <Timeline value={events} align="alternate" className="customized-timeline p-3" content={customizedContent} />
             <OverlayPanel className="bg-OJ" ref={opRef}>
                 {event && <EventOverlay event={event} setEvent={setEvent} toggle={toggle} />}
             </OverlayPanel>

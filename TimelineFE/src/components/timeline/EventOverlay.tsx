@@ -25,6 +25,7 @@ export default function EventOverlay({ event, setEvent, toggle }: EventOverlayPr
     const accept = () => {
         deleteEvent(event.id as Number)
         setEvent(null);
+        toggle();
     };
 
     const reject = () => {
