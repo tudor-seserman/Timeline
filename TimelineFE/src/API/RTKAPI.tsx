@@ -13,6 +13,7 @@ import IEditTimelineDTO from '../interfaces/IEditTimelineDTO'
 import IBackendConnectionDTO from '../interfaces/IBackendConnectionDTO'
 
 export const api = createApi({
+    reducerPath: 'api',
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:5128/api/',
         prepareHeaders: (headers, { getState }) => {
@@ -139,6 +140,7 @@ export const api = createApi({
         getAllPendingUserConnections: builder.query<IBackendConnectionDTO[], void>({
             query: () => '/Account/pendingConnections',
             providesTags: ["PendingConnections"],
+            keepUnusedDataFor: 0,
         }),
         requestConnection: builder.mutation<IBackendResponse, IBackendConnectionDTO>({
             query: (dto) => ({

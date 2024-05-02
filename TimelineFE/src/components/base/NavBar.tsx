@@ -8,17 +8,27 @@ import IReactChildren from '../../interfaces/IReactChildren';
 import AddConnection from '../connections/AddConnection';
 import { useEffect, useState } from 'react';
 import Alerts from '../alerts/Alerts';
-import { useGetAllPendingUserConnectionsQuery } from '../../API/RTKAPI';
+import { api, useGetAllPendingUserConnectionsQuery } from '../../API/RTKAPI';
 import { Badge } from 'primereact/badge';
+import { skipToken } from '@reduxjs/toolkit/query';
 
 
 export const NavBar = ({ children }: IReactChildren) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     let loggedInUser = useAppSelector(state => state.auth.token);
+    const [user, setUser] = useState<string | undefined>(undefined)
     const [connectionWindow, setConnectionWindow] = useState(false);
-    const { data: pendingConnections } = useGetAllPendingUserConnectionsQuery();
+    const { data: pendingConnections } = useGetAllPendingUserConnectionsQuery(user ?? skipToken);
     const [pendingBadge, setPendingBadge] = useState<number>(0);
+
+    useEffect(() => {
+        if (loggedInUser !== null) {
+            setUser(loggedInUser);
+        } else {
+            setUser(undefined);
+        }
+    }, [loggedInUser]);
 
     useEffect(() => { pendingConnections != undefined ? setPendingBadge(pendingConnections.length) : null }, [pendingConnections])
 
