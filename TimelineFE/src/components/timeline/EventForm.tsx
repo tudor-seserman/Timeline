@@ -29,6 +29,7 @@ interface EventFormProps {
 export default function EventForm({ submitHandler, success, action, populatedValues }: EventFormProps) {
     const [startTime, setStartTime] = useState(false);
     const [endTime, setEndTime] = useState(false);
+    // const [date, setDate] = useState(new Date());
 
     const {
         control,
@@ -90,6 +91,7 @@ export default function EventForm({ submitHandler, success, action, populatedVal
                         control={control}
                         render={({ field }) => (
                             <Calendar
+                                dateFormat="dd/mm/yy"
                                 className="w-[50%]"
                                 id={field.name}
                                 {...field}
@@ -110,6 +112,7 @@ export default function EventForm({ submitHandler, success, action, populatedVal
                         control={control}
                         render={({ field }) => (
                             <Calendar
+                                dateFormat="dd/mm/yy"
                                 className="w-[50%]"
                                 id={field.name}
                                 {...field}

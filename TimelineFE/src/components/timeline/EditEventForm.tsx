@@ -45,7 +45,7 @@ export default function EditEventForm({ editToggle, event, toggle }: EditEventFo
         name: event.name as string,
         description: event.description ? event.description as string : "",
         dateStarted: event.dateStarted ? new Date(event.dateStarted as Date) : new Date(),
-        dateFinished: event.dateCreated ? new Date(event.dateCreated as Date) : new Date(),
+        dateFinished: event.dateFinished ? new Date(event.dateFinished as Date) : new Date(),
     }
 
 

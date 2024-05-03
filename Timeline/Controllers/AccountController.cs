@@ -41,7 +41,7 @@ namespace Timeline.Controllers
             
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
-                var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
+                var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.Username);
                 if (user == null) return Unauthorized("Invalid Username!");
                 var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
                 

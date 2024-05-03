@@ -5,9 +5,11 @@ import { IBackendResponse } from '../../interfaces/IBackendResponse';
 import { useError } from '../../hooks/useError';
 import TimeLineForm, { TimelineSchemaValues } from './TimelineForm';
 import ICreateTimelineDTO from '../../interfaces/ICreateTimelineDTO';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function CreateTimeLineForm() {
+    const navigate = useNavigate();
     const [createTimeline, { isSuccess }] = useCreateTimelineMutation();
     const { setApiError } = useError();
 
@@ -23,6 +25,7 @@ export default function CreateTimeLineForm() {
 
         try {
             await createTimeline(createTimelineDTO).unwrap()
+            navigate("/dash")
         } catch (error: unknown) {
             setApiError(error as IBackendResponse);
         }
@@ -32,14 +35,14 @@ export default function CreateTimeLineForm() {
 
 
     return (
-        <Card className="bg-Blu" title="Create Timeline">
-            <div className="registration-form">
+        <Card className="bg-Blu shadow-none" title="Create Timeline">
+            < div className="registration-form" >
                 <div className="flex justify-content-center">
                     <div className="card mt-2 mb-1.5 ">
                         <TimeLineForm submitHandler={onSubmit} success={isSuccess} action="Create Timeline" />
                     </div>
                 </div>
-            </div>
+            </div >
         </Card >
     );
 }

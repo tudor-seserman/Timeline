@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import { useError } from '../../hooks/useError';
 import { IBackendResponse } from '../../interfaces/IBackendResponse';
 import { Card } from 'primereact/card';
+import { useNavigate } from 'react-router-dom';
 
 const RegistrationSchema = z.object({
     username: z.string(),
@@ -45,6 +46,7 @@ export const Register = () => {
     const [register] = useRegisterMutation();
     const dispatch = useDispatch();
     const { setApiError } = useError();
+    const navigate = useNavigate();
 
 
     const {
@@ -74,6 +76,7 @@ export const Register = () => {
             const user = await register(registrationDTO).unwrap()
             dispatch(setCredentials(user))
             reset();
+            navigate("dash")
         } catch (error: unknown) {
             setApiError(error as IBackendResponse);
         }

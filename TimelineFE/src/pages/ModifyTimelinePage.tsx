@@ -23,7 +23,7 @@ export default function ModifyTimelinePage() {
     return (
         <div className="bg-Blu">
             {timeline != undefined &&
-                <Card title={`Edit ${timeline.name}`}>
+                <Card title={`Edit ${timeline.name}`} className="shadow-none">
                     <div className="flex justify-content-center" >
                         <ConnectionGroup timelineName={timeline.name} timelineId={timeline.id} connections={timeline.userTTimelines as IBackendConnectionDTO[]} creator={timeline.creator as IBackendConnectionDTO} removeConnection />
                     </div>
