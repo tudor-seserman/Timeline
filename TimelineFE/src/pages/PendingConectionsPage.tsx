@@ -1,9 +1,11 @@
+import { ProgressSpinner } from "primereact/progressspinner";
 import { useGetAllPendingUserConnectionsQuery } from "../API/RTKAPI";
 import ConnectionCard from "../components/connections/ConnectionCard";
+import NoConnections from "../components/connections/NoConnections";
 
 
 export default function PendingConnectionsPage() {
-    const { data } = useGetAllPendingUserConnectionsQuery();
+    const { data, isLoading } = useGetAllPendingUserConnectionsQuery();
     return (
         <>
 
@@ -12,8 +14,10 @@ export default function PendingConnectionsPage() {
                     <ConnectionCard connection={c} key={index} pending={true} />
                 )
                 }
-
             </div >
+            {isLoading && <ProgressSpinner />}
+            {(data != undefined && data.length < 1) && <NoConnections pending />}
+
         </>
     )
 } 

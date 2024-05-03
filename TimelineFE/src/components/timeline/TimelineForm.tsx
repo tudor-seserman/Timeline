@@ -14,7 +14,10 @@ const TimelineSchema = z.object({
     description: z.string(),
     dateStarted: z.coerce.date(),
     dateFinished: z.coerce.date(),
-})
+}).refine((data) => data.dateFinished >= data.dateStarted, {
+    message: "End date cannot be earlier than start date.",
+    path: ["dateFinished"],
+});
 
 export type TimelineSchemaValues = z.infer<typeof TimelineSchema>
 

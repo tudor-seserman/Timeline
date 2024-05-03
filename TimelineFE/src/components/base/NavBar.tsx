@@ -11,17 +11,29 @@ import Alerts from '../alerts/Alerts';
 import { api, useGetAllPendingUserConnectionsQuery } from '../../API/RTKAPI';
 import { Badge } from 'primereact/badge';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { useAlert } from '../../hooks/useAlert';
 
 
 export const NavBar = ({ children }: IReactChildren) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { setAlert } = useAlert();
     let loggedInUser = useAppSelector(state => state.auth.token);
     const [connectionWindow, setConnectionWindow] = useState(false);
     const { data: pendingConnections } = useGetAllPendingUserConnectionsQuery((loggedInUser == null) ? skipToken : void 0);
     const [pendingBadge, setPendingBadge] = useState<number>(0);
 
-    useEffect(() => { pendingConnections != undefined ? setPendingBadge(pendingConnections.length) : null }, [pendingConnections])
+    useEffect(() => {
+        if (pendingConnections != undefined) {
+            setAlert(
+                {
+                    severity: "success",
+                    summary: `You have ${pendingConnections.length} pending request connection`,
+                }
+            )
+            setPendingBadge(pendingConnections.length)
+        }
+    }, [pendingConnections])
 
     const itemRenderer = (item: MenuItem) => (
         <a className="flex align-items-center p-menuitem-link">

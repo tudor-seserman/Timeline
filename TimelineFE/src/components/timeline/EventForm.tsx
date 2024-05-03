@@ -15,7 +15,10 @@ const EventSchema = z.object({
     description: z.string(),
     dateStarted: z.coerce.date(),
     dateFinished: z.coerce.date(),
-})
+}).refine((data) => data.dateFinished >= data.dateStarted, {
+    message: "End date cannot be earlier than start date.",
+    path: ["dateFinished"],
+});
 
 export type EventSchemaValues = z.infer<typeof EventSchema>
 
@@ -29,7 +32,6 @@ interface EventFormProps {
 export default function EventForm({ submitHandler, success, action, populatedValues }: EventFormProps) {
     const [startTime, setStartTime] = useState(false);
     const [endTime, setEndTime] = useState(false);
-    // const [date, setDate] = useState(new Date());
 
     const {
         control,
@@ -91,11 +93,11 @@ export default function EventForm({ submitHandler, success, action, populatedVal
                         control={control}
                         render={({ field }) => (
                             <Calendar
-                                dateFormat="dd/mm/yy"
+                                touchUI
                                 className="w-[50%]"
                                 id={field.name}
                                 {...field}
-                                showTime={startTime}
+                                showTime={endTime}
                             />
                         )} />
                     <label htmlFor="dateStarted" className={classNames({ 'p-error': errors.dateStarted })}>Start Date</label>
@@ -112,7 +114,6 @@ export default function EventForm({ submitHandler, success, action, populatedVal
                         control={control}
                         render={({ field }) => (
                             <Calendar
-                                dateFormat="dd/mm/yy"
                                 className="w-[50%]"
                                 id={field.name}
                                 {...field}
