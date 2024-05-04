@@ -5,7 +5,6 @@ import IEvent from '../../interfaces/IEvent';
 import { Card } from 'primereact/card';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import EventOverlay from './EventOverlay';
-import { faLessThan } from '@fortawesome/free-solid-svg-icons';
 
 
 interface TimelineEventsProps {

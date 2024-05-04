@@ -31,7 +31,9 @@ export default function TimelinePage() {
                     <p className="m-0">
                         {currentTimeline.description}
                     </p>
-                    <ConnectionGroup timelineName={currentTimeline.name} timelineId={currentTimeline.id} connections={currentTimeline.userTTimelines as IBackendConnectionDTO[]} creator={currentTimeline.creator as IBackendConnectionDTO} />
+                    <div className="flex justify-content-center pt-4">
+                        <ConnectionGroup timelineName={currentTimeline.name} timelineId={currentTimeline.id} connections={currentTimeline.userTTimelines as IBackendConnectionDTO[]} creator={currentTimeline.creator as IBackendConnectionDTO} />
+                    </div>
                 </Card >
             </div >
             <CreateEventForm timelineId={currentTimeline.id} />

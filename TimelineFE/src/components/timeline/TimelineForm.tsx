@@ -74,7 +74,7 @@ export default function TimeLineForm({ submitHandler, success, action, populated
 
 
             <div className="field">
-                <span className="p-float-label p-input-icon-right">
+                <span className="p-float-label">
                     <Controller
                         name="description"
                         control={control}
@@ -99,6 +99,7 @@ export default function TimeLineForm({ submitHandler, success, action, populated
                                 id={field.name}
                                 {...field}
                                 showTime={startTime}
+                                showIcon
                             />
                         )} />
                     <label htmlFor="dateStarted" className={classNames({ 'p-error': errors.dateStarted })}>Start Date</label>
@@ -119,6 +120,7 @@ export default function TimeLineForm({ submitHandler, success, action, populated
                                 id={field.name}
                                 {...field}
                                 showTime={endTime}
+                                showIcon
                             />
                         )} />
                     <label htmlFor="dateFinished" className={classNames({ 'p-error': errors.dateFinished })}>End Date</label>

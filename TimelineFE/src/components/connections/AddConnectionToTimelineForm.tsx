@@ -63,7 +63,7 @@ export default function AddConnectionToTimelineForm({ timelineName, timelineId }
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="p-fluid">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-fluid p-2">
             <div className="field">
                 <span className="p-float-label">
                     <Controller

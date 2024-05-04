@@ -72,7 +72,7 @@ export default function EventForm({ submitHandler, success, action, populatedVal
 
 
             <div className="field p-2">
-                <span className="p-float-label p-input-icon-right">
+                <span className="p-float-label">
                     <Controller
                         name="description"
                         control={control}
@@ -93,11 +93,11 @@ export default function EventForm({ submitHandler, success, action, populatedVal
                         control={control}
                         render={({ field }) => (
                             <Calendar
-                                touchUI
                                 className="w-[50%]"
                                 id={field.name}
                                 {...field}
-                                showTime={endTime}
+                                showTime={startTime}
+                                showIcon
                             />
                         )} />
                     <label htmlFor="dateStarted" className={classNames({ 'p-error': errors.dateStarted })}>Start Date</label>
@@ -118,6 +118,7 @@ export default function EventForm({ submitHandler, success, action, populatedVal
                                 id={field.name}
                                 {...field}
                                 showTime={endTime}
+                                showIcon
                             />
                         )} />
                     <label htmlFor="dateFinished" className={classNames({ 'p-error': errors.dateFinished })}>End Date</label>

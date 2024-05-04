@@ -25,12 +25,14 @@ export const NavBar = ({ children }: IReactChildren) => {
 
     useEffect(() => {
         if (pendingConnections != undefined) {
-            setAlert(
-                {
-                    severity: "success",
-                    summary: `You have ${pendingConnections.length} pending request connection`,
-                }
-            )
+            if (pendingConnections.length > 0) {
+                setAlert(
+                    {
+                        severity: "success",
+                        summary: `You have ${pendingConnections.length} pending request connection`,
+                    }
+                )
+            }
             setPendingBadge(pendingConnections.length)
         }
     }, [pendingConnections])

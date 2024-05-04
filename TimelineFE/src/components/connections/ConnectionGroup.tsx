@@ -32,6 +32,7 @@ export default function ConnectionGroup({ timelineName, timelineId, connections,
             </div>
             <OverlayPanel className="bg-OJ" ref={opRef}>
                 <ConnectionInTimelineDetails connections={notCreatorConnections} creator={creator} removeConnection={removeConnection} timelineId={timelineId} />
+
                 <AddConnectionToTimeline timelineName={timelineName} timelineId={timelineId} />
             </OverlayPanel>
         </>
