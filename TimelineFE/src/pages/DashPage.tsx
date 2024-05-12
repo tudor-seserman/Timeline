@@ -49,17 +49,9 @@ export default function DashPage() {
         return (
             <div className="col-12 border-OJ bg-Blu" key={timeline.id as Key}>
                 <div className={classNames('flex flex-column xl:flex-row xl:align-items-start p-4 gap-4 border-OJ', { 'border-top-1 ': index !== 0 })}>
-                    {/* <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src={`https://primefaces.org/cdn/primereact/images/product/${product.image}`} alt={product.name} /> */}
                     <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4 bg-Blu">
                         <div className="flex flex-column align-items-center sm:align-items-start gap-3">
                             <div className="text-2xl font-bold text-900">{timeline.name}</div>
-                            {/* <div className="flex align-items-center gap-3">
-                                <span className="flex align-items-center gap-2">
-                                    <i className="pi pi-tag"></i>
-                                    <span className="font-semibold">{product.category}</span>
-                                </span>
-                                <Tag value={product.inventoryStatus} severity={getSeverity(product)}></Tag>
-                            </div> */}
                             <ConnectionGroup timelineName={timeline.name} timelineId={timeline.id as Number} connections={timeline.userTTimelines} creator={timeline.creator} />
                         </div>
                         <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2  ">
@@ -75,26 +67,17 @@ export default function DashPage() {
     const gridItem = (timeline: ITimeline) => {
         return (
             <div className="col-12 sm:col-6 lg:col-12 xl:col-4 p- bg-OJ " key={timeline.id as Key}>
-                <div className="p-4 border-1 border-round border-OJ bg-Blu">
-                    {/* <div className="flex flex-wrap align-items-center justify-content-between gap-2">
-                            <div className="flex align-items-center gap-2">
-                            <i className="pi pi-tag"></i>
-                            <span className="font-semibold">{product.category}</span>
-                        </div>
-                        <Tag value={product.inventoryStatus} severity={getSeverity(product)}></Tag>
-                    </div> */}
+                <div className="p-4 border-1 h-full border-round border-OJ bg-Blu flex flex-column justify-content-between">
                     <div className="flex flex-column align-items-center gap-3 py-5">
-                        {/* <img className="w-9 shadow-2 border-round" src={`https://primefaces.org/cdn/primereact/images/product/${product.image}`} alt={product.name} /> */}
                         <div className="text-2xl font-bold">{timeline.name}</div>
                         <ConnectionGroup timelineName={timeline.name} timelineId={timeline.id as Number} connections={timeline.userTTimelines} creator={timeline.creator} />
-
                     </div>
-                    <div className="flex align-items-center justify-content-between">
+                    <div className="flex align-items-baseline justify-content-between flex-wrap">
                         <SelectButton timelineId={timeline.id} />
                         {username === timeline.creator.name && <EditButton timelineId={timeline.id} />}
                     </div>
                 </div>
-            </div >
+            </div>
         );
     };
 

@@ -67,6 +67,7 @@ namespace Timeline.Controllers
         }
 
         // GET: api/Timeline/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<TimelineDTO>> GetTTimeline(int id)
         {
@@ -111,7 +112,6 @@ namespace Timeline.Controllers
         }
         
         // PUT: api/Timeline/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTTimeline(int id, EditTimelineDTO editTimelineDto)
@@ -172,6 +172,7 @@ namespace Timeline.Controllers
             }
         }
 
+        [Authorize]
         // DELETE: api/Timeline/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTTimeline(int id)
