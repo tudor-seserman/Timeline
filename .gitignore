@@ -4,4 +4,4 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 /Timeline/Migrations/
-/Timeline/wwwroot/appsettings.json
+appsettings.json

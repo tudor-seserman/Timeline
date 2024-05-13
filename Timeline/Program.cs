@@ -1,17 +1,29 @@
 using System.Configuration;
+using Amazon.Extensions.NETCore.Setup;
+using Amazon.SimpleSystemsManagement;
+using Amazon.SimpleSystemsManagement.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Timeline.Data;
 using Timeline.Interfaces;
 using Timeline.Models;
 using Timeline.Service;
-using Microsoft.OpenApi.Models;
 using Timeline.Data.Repositories;
 using Timeline.Interfaces.Data;
 
+
 var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var awsOptions = new AWSOptions
+{
+    Region = Amazon.RegionEndpoint.USEast1 // Replace <YourRegion> with your AWS region
+};
+var parameterStore = awsOptions.CreateServiceClient<IAmazonSimpleSystemsManagement>();
+var parameter = parameterStore.GetParameterAsync(new GetParameterRequest{Name="TIMELINES_DB_RDS",WithDecryption = true} ).Result;
+var connectionString = parameter.Parameter.Value;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -53,7 +65,9 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 });
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("TimelineContext")));
+
+    options.UseNpgsql(connectionString)
+);
 
 builder.Services.AddCors(options =>
 {
