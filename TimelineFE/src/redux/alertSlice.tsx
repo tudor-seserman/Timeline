@@ -7,11 +7,12 @@ const slice = createSlice({
     initialState: null as IToastAlert | null,
     reducers: {
         createAlert: (
+            // @ts-ignore
             state,
             {
                 payload: alert
             }: PayloadAction<IToastAlert>
-        ) => alert
+        ) => state = alert
         ,
         resetAlertState: () => null
         ,

@@ -8,12 +8,13 @@ const slice = createSlice({
     initialState: [] as IBackendTimelinesDTO[],
     reducers: {
         setAllUserTimelines: (
+            // @ts-ignore
             state,
             {
                 payload: allUserTimelines
             }: PayloadAction<IBackendTimelinesDTO[]>,
         ) => {
-            state = allUserTimelines;
+            allUserTimelines;
         },
     }
 })

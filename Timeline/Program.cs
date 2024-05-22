@@ -16,15 +16,21 @@ using Timeline.Interfaces.Data;
 
 
 var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-var awsOptions = new AWSOptions
-{
-    Region = Amazon.RegionEndpoint.USEast1 // Replace <YourRegion> with your AWS region
-};
-var parameterStore = awsOptions.CreateServiceClient<IAmazonSimpleSystemsManagement>();
-var parameter = parameterStore.GetParameterAsync(new GetParameterRequest{Name="TIMELINES_DB_RDS",WithDecryption = true} ).Result;
-var connectionString = parameter.Parameter.Value;
-
+// var awsOptions = new AWSOptions
+// {
+//     Region = Amazon.RegionEndpoint.USEast1
+// };
+//
+// var parameterNames = new List<string> { "TIMELINES_DB_RDS", "TIMELINES_JWT_KEY" };
+//
+//
 var builder = WebApplication.CreateBuilder(args);
+//
+// var parameters = await builder.Services.AddParameterStoreAsync(awsOptions, parameterNames);
+//
+// // Use the fetched parameters
+// var dbConnectionString = parameters["TIMELINES_DB_RDS"];
+// var signinKey = parameters["TIMELINES_JWT_KEY"];
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -58,6 +64,7 @@ builder.Services.AddSwaggerGen(option =>
         }
     });
 });
+Console.WriteLine(builder.Configuration["JWT:SigninKey"]);
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
@@ -66,7 +73,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 
-    options.UseNpgsql(connectionString)
+    options.UseNpgsql(builder.Configuration["ConnectionStrings:TimelineContext"])
 );
 
 builder.Services.AddCors(options =>
@@ -74,7 +81,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy  =>
         {
-            policy.WithOrigins("http://localhost:5173")
+            policy.WithOrigins("https://www.timeline.systems")
+            // policy.WithOrigins("http://localhost:5173")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -106,6 +114,7 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidAudience = builder.Configuration["JWT:Audience"],
         ValidateIssuerSigningKey =true, 
+        // IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(signinKey))
         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigninKey"]))
     };
 });
@@ -122,6 +131,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.UseHttpsRedirection();
 

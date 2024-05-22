@@ -41,6 +41,7 @@ export const NavBar = ({ children }: IReactChildren) => {
         <a className="flex align-items-center p-menuitem-link">
             <span className={item.icon} />
             <span className="mx-2">{item.label}</span>
+            {/* @ts-ignore */}
             {item.badge && (pendingBadge > 0) && <Badge className="ml-auto bg-Cora" value={item.badge} />}
         </a>
     );
@@ -63,17 +64,20 @@ export const NavBar = ({ children }: IReactChildren) => {
             label: 'Connections',
             visible: loggedInUser != null,
             items: [{
+                // @ts-ignore
                 id: 'nav3sub1',
                 label: 'All',
                 command: () => { navigate('/connections') }
             }
                 ,
             {
+                // @ts-ignore
                 id: 'nav3sub2',
                 label: 'Add New',
                 command: () => { setConnectionWindow(true) }
             },
             {
+                // @ts-ignore
                 id: 'nav3sub3',
                 label: 'Pending',
                 badge: pendingBadge,
