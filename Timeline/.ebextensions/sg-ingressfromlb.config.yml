@@ -6,5 +6,5 @@ Resources:
         IpProtocol: tcp
         ToPort: 1000
         FromPort: 1000
-        SourceSecurityGroupId: {"Fn::GetAtt" : ["AWSEBLoadBalancerSecurityGroup", "sg-0116a29d9448d8f50"]}]
+        SourceSecurityGroupId: {"Fn::GetAtt" : ["AWSEBLoadBalancerSecurityGroup", "sg-00ed524009eba9358"]}]
         
