@@ -1,6 +1,7 @@
 bin/
 obj/
 deploy/
+publish/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
@@ -12,7 +13,11 @@ Timeline/Timeline.runtimeconfig.json
 site.zip
 .DS_Store
 *.tfstate
+*.idea
+.ebextensions/
 
 TimelineFE/.terraform.lock.hcl
 TimelineFE/.terraform/providers/registry.terraform.io/hashicorp/aws/5.49.0/darwin_amd64/terraform-provider-aws_v5.49.0_x5
 TimelineFE/.terraform/modules/modules.json
+
+.DS_Store
