@@ -33,8 +33,12 @@ public class ParameterStoreService
 
 public static class ParameterStoreExtensions
 {
-    public static async Task<Dictionary<string, string>> AddParameterStoreAsync(this IServiceCollection services, AWSOptions awsOptions, List<string> parameterNames)
+    public static async Task<Dictionary<string, string>> AddParameterStoreAsync(this IServiceCollection services, List<string> parameterNames)
     {
+        var awsOptions = new AWSOptions
+        {
+            Region = Amazon.RegionEndpoint.USEast1
+        };
         var ssmClient = awsOptions.CreateServiceClient<IAmazonSimpleSystemsManagement>();
         var parameterStoreService = new ParameterStoreService(ssmClient);
         var parameters = await parameterStoreService.GetParametersAsync(parameterNames);

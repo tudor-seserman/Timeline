@@ -16,21 +16,15 @@ using Timeline.Interfaces.Data;
 
 
 var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-// var awsOptions = new AWSOptions
-// {
-//     Region = Amazon.RegionEndpoint.USEast1
-// };
-//
-// var parameterNames = new List<string> { "TIMELINES_DB_RDS", "TIMELINES_JWT_KEY" };
-//
-//
+var parameterNames = new List<string> { "TIMELINES_DB_RDS", "TIMELINES_JWT_KEY" };
+
+
 var builder = WebApplication.CreateBuilder(args);
-//
-// var parameters = await builder.Services.AddParameterStoreAsync(awsOptions, parameterNames);
-//
-// // Use the fetched parameters
-// var dbConnectionString = parameters["TIMELINES_DB_RDS"];
-// var signinKey = parameters["TIMELINES_JWT_KEY"];
+
+var parameters = await builder.Services.AddParameterStoreAsync(parameterNames);
+// Use the fetched parameters
+var dbConnectionString = parameters["TIMELINES_DB_RDS"];
+var signinKey = parameters["TIMELINES_JWT_KEY"];
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -73,8 +67,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 });
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
-
-    options.UseNpgsql(builder.Configuration["ConnectionStrings:TimelineContext"])
+        options.UseNpgsql(dbConnectionString)
 );
 
 builder.Services.AddCors(options =>
@@ -82,7 +75,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy  =>
         {
-            policy.WithOrigins("https://www.timeline.systems")
+            policy.WithOrigins("https://www.timeline.systems","https://timeline.systems")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -114,11 +107,10 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidAudience = builder.Configuration["JWT:Audience"],
         ValidateIssuerSigningKey =true, 
-        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigninKey"]))
+        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(signinKey))
     };
 });
-
-builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ITokenService>(provider => new TokenService(provider.GetRequiredService<IConfiguration>(),signinKey));
 builder.Services.AddScoped<ITimelineRepository, TimelineRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
