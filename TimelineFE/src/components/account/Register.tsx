@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 const RegistrationSchema = z.object({
     username: z.string(),
     email: z.string().email(),
+    details: z.string().max(0, 'You are a bot!'),
     password: z.string()
         .min(8)
         .max(24)
@@ -52,6 +53,7 @@ export const Register = () => {
     const {
         control,
         formState: { errors, isSubmitting },
+        register: formRegister,
         handleSubmit,
         reset }
         = useForm<RegistrationSchemaValues>({
@@ -67,18 +69,22 @@ export const Register = () => {
         });
 
     const onSubmit: SubmitHandler<RegistrationSchemaValues> = async (data) => {
-        const registrationDTO: IRegistrationDTO = {
-            username: data.username,
-            email: data.email,
-            password: data.password,
-        }
-        try {
-            const user = await register(registrationDTO).unwrap()
-            dispatch(setCredentials(user))
-            reset();
-            navigate("dash")
-        } catch (error: unknown) {
-            setApiError(error as IBackendResponse);
+        if (data.details === '') {
+            const registrationDTO: IRegistrationDTO = {
+                username: data.username,
+                email: data.email,
+                password: data.password,
+            }
+            try {
+                const user = await register(registrationDTO).unwrap()
+                dispatch(setCredentials(user))
+                reset();
+                navigate("dash")
+            } catch (error: unknown) {
+                setApiError(error as IBackendResponse);
+            }
+        } else {
+            navigate("/");
         }
     };
 
@@ -168,6 +174,10 @@ export const Register = () => {
                                     <label htmlFor="verifyPassword" className={classNames({ 'p-error': errors.verifyPassword })}>Verify Password*</label>
                                 </span>
                                 {errors.verifyPassword && <small className="p-error">{errors.verifyPassword.message}</small>}
+                            </div>
+                            <div className="hidden">
+                                <label htmlFor="details">Don't fill this out if you're human:</label>
+                                <input {...formRegister('details')} />
                             </div>
                             <Button loading={isSubmitting} className="mt-2" type="submit" label={isSubmitting ? "Sending..." : "Register"} />
 
