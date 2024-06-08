@@ -1,7 +1,7 @@
 /* Futura PT Book */
 @font-face {
   font-family: "FuturaPT";
-  src: url("src/assets/Futura/FuturaPTBook.otf") format("opentype");
+  src: url("./assets/Futura/FuturaPTBook.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
 }
@@ -9,7 +9,7 @@
 /* Futura PT Book Oblique */
 @font-face {
   font-family: "FuturaPT";
-  src: url("src/assets/Futura/FuturaPTBookOblique.otf") format("opentype");
+  src: url("./assets/Futura/FuturaPTBookOblique.otf") format("opentype");
   font-weight: normal;
   font-style: italic;
 }
@@ -17,7 +17,7 @@
 /* Futura PT Medium */
 @font-face {
   font-family: "FuturaPT";
-  src: url("src/assets/Futura/FuturaPTMedium.otf") format("opentype");
+  src: url("./assets/Futura/FuturaPTMedium.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
 }
@@ -25,7 +25,7 @@
 /* Futura PT Medium Oblique */
 @font-face {
   font-family: "FuturaPT";
-  src: url("src/assets/Futura/FuturaPTMediumOblique.otf") format("opentype");
+  src: url("./assets/Futura/FuturaPTMediumOblique.otf") format("opentype");
   font-weight: 500;
   font-style: italic;
 }
@@ -33,7 +33,7 @@
 /* Futura PT Bold */
 @font-face {
   font-family: "FuturaPT";
-  src: url("src/assets/Futura/FuturaPTBold.otf") format("opentype");
+  src: url("./assets/Futura/FuturaPTBold.otf") format("opentype");
   font-weight: bold;
   font-style: normal;
 }
@@ -41,7 +41,7 @@
 /* Futura PT Bold Oblique */
 @font-face {
   font-family: "FuturaPT";
-  src: url("src/assets/Futura/FuturaPTBoldOblique.otf") format("opentype");
+  src: url("./assets/Futura/FuturaPTBoldOblique.otf") format("opentype");
   font-weight: bold;
   font-style: italic;
 }

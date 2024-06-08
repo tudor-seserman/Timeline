@@ -15,7 +15,8 @@ import IBackendConnectionDTO from '../interfaces/IBackendConnectionDTO'
 export const api = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:5128/api/',
+        // baseUrl: 'http://localhost:5128/api/',
+        baseUrl: '//api.timeline.systems/api/',
         prepareHeaders: (headers, { getState }) => {
             // By default, if we have a token in the store, let's use that for authenticated requests
             const token = (getState() as RootState).auth.token
@@ -140,7 +141,6 @@ export const api = createApi({
         getAllPendingUserConnections: builder.query<IBackendConnectionDTO[], void>({
             query: () => '/Account/pendingConnections',
             providesTags: ["PendingConnections"],
-            keepUnusedDataFor: 0,
         }),
         requestConnection: builder.mutation<IBackendResponse, IBackendConnectionDTO>({
             query: (dto) => ({

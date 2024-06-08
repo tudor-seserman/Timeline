@@ -12,10 +12,10 @@ public class TokenService:ITokenService
     private readonly IConfiguration _configuration;
     private readonly SymmetricSecurityKey _key;
     
-    public TokenService(IConfiguration configuration)
+    public TokenService(IConfiguration configuration, String signinKey)
     {
         _configuration = configuration;
-        _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SigninKey"]));
+        _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signinKey));
     }
 
     public string CreateToken(AppUser user)

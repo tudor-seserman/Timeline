@@ -6,6 +6,7 @@ const slice = createSlice({
     initialState: null as IAlert[] | null,
     reducers: {
         createErrorMsg: (
+            // @ts-ignore
             state,
             {
                 payload: alerts

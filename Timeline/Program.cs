@@ -1,23 +1,36 @@
 using System.Configuration;
+using Amazon.Extensions.NETCore.Setup;
+using Amazon.SimpleSystemsManagement;
+using Amazon.SimpleSystemsManagement.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Timeline.Data;
 using Timeline.Interfaces;
 using Timeline.Models;
 using Timeline.Service;
-using Microsoft.OpenApi.Models;
 using Timeline.Data.Repositories;
 using Timeline.Interfaces.Data;
 
+
 var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var parameterNames = new List<string> { "TIMELINES_DB_RDS", "TIMELINES_JWT_KEY" };
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+var parameters = await builder.Services.AddParameterStoreAsync(parameterNames);
+// Use the fetched parameters
+var dbConnectionString = parameters["TIMELINES_DB_RDS"];
+var signinKey = parameters["TIMELINES_JWT_KEY"];
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks();
 
 builder.Services.AddSwaggerGen(option =>
 {
@@ -47,20 +60,22 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
+
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
 });
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("TimelineContext")));
+        options.UseNpgsql(dbConnectionString)
+);
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy  =>
         {
-            policy.WithOrigins("http://localhost:5173")
+            policy.WithOrigins("https://www.timeline.systems","https://timeline.systems")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -92,11 +107,10 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidAudience = builder.Configuration["JWT:Audience"],
         ValidateIssuerSigningKey =true, 
-        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigninKey"]))
+        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(signinKey))
     };
 });
-
-builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ITokenService>(provider => new TokenService(provider.GetRequiredService<IConfiguration>(),signinKey));
 builder.Services.AddScoped<ITimelineRepository, TimelineRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -107,15 +121,19 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}else
+{
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 
 app.UseCors(MyAllowSpecificOrigins);
 
-
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHealthChecks("/health");
 
 app.MapControllers();
 

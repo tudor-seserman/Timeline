@@ -24,6 +24,7 @@ const LoginSchema = z.object({
         .regex(/[0-9]/, { message: "Must contain at least one number." })
         .regex(/\W|_/, { message: "Must contain at least one non-letter and non-number." })
     ,
+    details: z.string().max(0, 'You are a bot!'),
 })
 
 export type LoginSchemaValues = z.infer<typeof LoginSchema>
@@ -39,6 +40,7 @@ export const Login = () => {
 
     const { control,
         formState: { errors, isSubmitting },
+        register,
         handleSubmit,
         reset }
         = useForm<LoginSchemaValues>({
@@ -52,17 +54,21 @@ export const Login = () => {
         });
 
     const onSubmit: SubmitHandler<LoginSchemaValues> = async (data) => {
-        const loginDTO: ILoginDTO = {
-            username: data.username,
-            password: data.password,
-        }
-        try {
-            const user = await login(loginDTO).unwrap()
-            dispatch(setCredentials(user))
-            reset();
-            navigate("/dash");
-        } catch (error: unknown) {
-            setApiError(error as IBackendResponse);
+        if (data.details === '') {
+            const loginDTO: ILoginDTO = {
+                username: data.username,
+                password: data.password,
+            }
+            try {
+                const user = await login(loginDTO).unwrap()
+                dispatch(setCredentials(user))
+                reset();
+                navigate("/dash");
+            } catch (error: unknown) {
+                setApiError(error as IBackendResponse);
+            }
+        } else {
+            navigate("/");
         }
     }
 
@@ -108,6 +114,10 @@ export const Login = () => {
                                     <label htmlFor="password" className={classNames({ 'p-error': errors.password })}> Password*</label>
                                 </span>
                                 {errors.password && <small className="p-error">{errors.password.message}</small>}
+                            </div>
+                            <div className="hidden">
+                                <label htmlFor="details">Don't fill this out if you're human:</label>
+                                <input {...register('details')} />
                             </div>
 
                             <Button disabled={isSubmitting} className="mt-2" type="submit" label={isSubmitting ? "Sending..." : "Login"} />

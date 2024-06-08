@@ -1,4 +1,3 @@
-import { Card } from "primereact/card";
 import ITimeline from "../../interfaces/ITimeline";
 import { Button } from "primereact/button";
 import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";
